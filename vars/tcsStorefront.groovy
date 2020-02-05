@@ -39,7 +39,7 @@ def call(body) {
 			{
 				timestamps
 				{
-					Packaging.startAnalyzer(this)
+					//Packaging.startAnalyzer(this)
 					Packaging.runBuild(this, solution)
 				}
 			}
@@ -115,8 +115,8 @@ def call(body) {
 		}
 		finally
 		{
-			Packaging.stopDockerTestEnvironment(this, dockerTag)
-			Utilities.generateAllureReport(this)
+			//Packaging.stopDockerTestEnvironment(this, dockerTag)
+			//Utilities.generateAllureReport(this)
 			bat "docker image prune --force"
 			if(currentBuild.result != 'FAILURE')
 			{
