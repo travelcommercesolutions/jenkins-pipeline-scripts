@@ -30,7 +30,10 @@ def call(body) {
 			{
 				timestamps
 				{
-					deleteDir()
+					if(BRANCH_NAME != 'dev')
+					{
+						deleteDir()
+					}
 					checkout scm
 				}
 			}
