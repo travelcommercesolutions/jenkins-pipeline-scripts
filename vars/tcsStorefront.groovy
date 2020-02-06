@@ -83,7 +83,7 @@ def call(body) {
 				timestamps
 				{
 					Packaging.endAnalyzer(this)
-					//Packaging.checkAnalyzerGate(this)
+					Packaging.checkAnalyzerGate(this)
 				}
 			}
 			def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
