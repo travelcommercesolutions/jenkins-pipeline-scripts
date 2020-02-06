@@ -73,7 +73,7 @@ def call(body) {
 				{
 					timestamps
 					{
-						Packaging.runUnitTests(this, tests)
+						//Packaging.runUnitTests(this, tests)
 					}
 				}
 			}
@@ -88,24 +88,24 @@ def call(body) {
 			}
 			def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
 
-			// stage('Publish')
-			// {
-			// 	timestamps
-			// 	{
-			// 		def notes = Utilities.getReleaseNotes(this, webProject)
+			stage('Publish')
+			{
+				timestamps
+				{
+					def notes = Utilities.getReleaseNotes(this, webProject)
 			// 		if (env.BRANCH_NAME == 'qa' || env.BRANCH_NAME == 'master')
 			// 		{
 			// 			Packaging.publishRelease(this, version, notes)
 			// 		}
 			// 		Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
-			// 	}
-			// }
+				}
+			}
 
 			stage('Cleanup')
 			{
 				timestamps
 				{
-					// bat "dotnet build-server shutdown"
+					bat "dotnet build-server shutdown"
 					// bat "docker image prune --force"
 				}
 			}
