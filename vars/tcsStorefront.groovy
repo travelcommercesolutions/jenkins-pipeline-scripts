@@ -42,7 +42,7 @@ def call(body) {
 			{
 				timestamps
 				{
-					//Packaging.startAnalyzer(this)
+					Packaging.startAnalyzer(this)
 					Packaging.runBuild(this, solution)
 				}
 			}
@@ -82,7 +82,7 @@ def call(body) {
 			{
 				timestamps
 				{
-					//Packaging.endAnalyzer(this) // not enough rights to install
+					Packaging.endAnalyzer(this)
 					//Packaging.checkAnalyzerGate(this)
 				}
 			}
