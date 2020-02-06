@@ -304,7 +304,7 @@ class Packaging {
     def static runUnitTests(context, tests)
     {
         context.echo "Running MSBuild Code Analysis Tests"
-        def wsFolder = pwd()
+        def wsFolder = context.pwd()
         def solutions = context.findFiles(glob: '*.sln')
 
         if (solutions.size() > 0)
