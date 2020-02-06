@@ -303,14 +303,18 @@ class Packaging {
 
     def static runUnitTests(context, tests)
     {
-        String paths = ""
-        for(int i = 0; i < tests.size(); i++)
-        {
-            def test = tests[i]
-            paths += "\"$test.path\" "
-        }
+        context.echo "Running MSBuild Code Analysis Tests"
+        def wsFolder = pwd()
+        def solutions = context.findFiles(glob: '*.sln')
 
-        Utilities.runUnitTest(context, "Category=Unit|Category=CI", paths, "xUnit.UnitTests.xml")
+        if (solutions.size() > 0)
+        {
+            for (int i = 0; i < solutions.size(); i++)
+            {
+                def solution = solutions[i]
+                context.bat "\"${context.tool DefaultMSBuild}\" \"${solution.name}\" /p:RunCodeAnalysis=true \"/p:CodeAnalysisLogFile=$wsFolder\\CodeAnalysis.xml\""
+            }
+        }
     }
 
 	def static publishRelease(context, version, releaseNotes)

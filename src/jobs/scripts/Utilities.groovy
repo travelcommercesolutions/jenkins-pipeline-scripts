@@ -264,7 +264,7 @@ class Utilities {
         context.dir(coverageFolder)
         {
             context.deleteDir()
-        }   
+        }
 
         if(paths.size() < 1)
         {
@@ -275,9 +275,8 @@ class Utilities {
         File folder = new File(coverageFolder); 
         if (!folder.mkdir()) { 
             throw new Exception("can't create coverage folder: " + coverageFolder); 
-        } 
+        }
 
-            
         def pdbDirs = getPDBDirsStr(context)
         if(isNetCore(context.projectType)){
             context.bat "\"${context.env.OPENCOVER}\\opencover.console.exe\" -returntargetcode -oldStyle -searchdirs:\"${pdbDirs}\" -register:user -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${context.env.DOTNET_PATH}\\dotnet.exe\" -targetargs:\"vstest ${paths} /TestCaseFilter:(${traits})\""
