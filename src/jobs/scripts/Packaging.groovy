@@ -153,7 +153,7 @@ class Packaging {
     {
         context.echo "Preparing release for ${version}"
         def tempFolder = Utilities.getTempFolder(context)
-        def websitePath = Utilities.getWebPublishFolder(context, websiteDir)     
+        def websitePath = Utilities.getWebPublishFolder(context, websiteDir)
         def packagesDir = Utilities.getArtifactFolder(context)
 
         context.dir(packagesDir)
@@ -168,10 +168,10 @@ class Packaging {
         }
         else
         {
-            context.bat "\"${context.tool DefaultMSBuild}\" \"${webProject}\" /nologo /verbosity:m /p:Configuration=Release /p:Platform=\"Any CPU\" /p:DebugType=none \"/p:OutputPath=$tempFolder\""
+            context.bat "\"${context.tool DefaultMSBuild}\" \"${webProject}\" /nologo /verbosity:m /p:Configuration=Debug /p:Platform=\"Any CPU\" /p:DebugType=none \"/p:OutputPath=$tempFolder\""
         }
 
-        (new AntBuilder()).zip(destfile: "${packagesDir}\\${zipArtifact}.${version}.zip", basedir: "${websitePath}")
+        (new AntBuilder()).zip(destfile: "${packagesDir}\\${zipArtifact}-${version}.zip", basedir: "${websitePath}")
     }
 
     def static buildSolutions(context)
