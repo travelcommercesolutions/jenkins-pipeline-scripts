@@ -168,7 +168,7 @@ class Packaging {
         }
         else
         {
-            context.bat "\"${context.tool DefaultMSBuild}\" \"${webProject}\" /nologo /verbosity:m /p:Configuration=Debug /p:Platform=\"Any CPU\" /p:DebugType=none \"/p:OutputPath=$tempFolder\""
+            context.bat "\"${context.tool DefaultMSBuild}\" \"${webProject}\" /nologo /verbosity:m /p:Configuration=Release /p:Platform=\"Any CPU\" /p:DebugType=none \"/p:OutputPath=$tempFolder\""
         }
 
         (new AntBuilder()).zip(destfile: "${packagesDir}\\${zipArtifact}-${version}.zip", basedir: "${websitePath}")
@@ -281,29 +281,23 @@ class Packaging {
 			if (qg.status != 'OK' && qg.status != 'WARN') {
 			    context.error "Pipeline aborted due to quality gate failure: ${qg.status}"
 			}
-		}        
+		}
     }
 
     def static runGulpBuild(context)
     {
-        context.timeout(activity: true, time: 15){
-            def packagesDir = Utilities.getArtifactFolder(context)
+        def packagesDir = Utilities.getArtifactFolder(context)
 
-            context.dir(packagesDir)
-            {
-                context.deleteDir()
-            }        
-            context.bat "npm install --prefer-offline --dev"
-            def bowerjs = new File("${context.env.WORKSPACE}\\bower.json")
-            if(bowerjs.exists()){
-                context.bat "node node_modules\\bower\\bin\\bower install --force-latest"
-            }
-            context.bat "node node_modules\\gulp\\bin\\gulp.js compress"
+        context.dir(packagesDir)
+        {
+            context.deleteDir()
         }
-    }    
+        context.bat "npm install --dev"
+        context.bat "node node_modules\\gulp\\bin\\gulp.js compress"
+    }
 
     def static runUnitTests(context, tests)
-    {        
+    {
         String paths = ""
         for(int i = 0; i < tests.size(); i++)
         {
