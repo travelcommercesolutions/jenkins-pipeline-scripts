@@ -230,7 +230,7 @@ class Packaging {
         if(Utilities.isNetCore(context.projectType)){
             coverageReportType = 'opencover'
         }
-        context.withSonarQubeEnv('VC Sonar Server') {
+        context.withSonarQubeEnv('TCS Sonar Server') {
             def repoName = Utilities.getRepoName(context)
             def prNumber = Utilities.getPullRequestNumber(context)
             def orgName = Utilities.getOrgName(context)
@@ -253,7 +253,7 @@ class Packaging {
         def orgName = Utilities.getOrgName(context)
         def projectKey = "${fullJobName}_${context.env.BRANCH_NAME}".replaceAll('/', '_')
 
-        context.withSonarQubeEnv('VC Sonar Server') {
+        context.withSonarQubeEnv('TCS Sonar Server') {
             context.timeout(activity: true, time: 15){
                 if(Utilities.isPullRequest(context)){
                     context.bat "\"${sqScanner}\\bin\\sonar-scanner.bat\" scan -Dsonar.projectKey=${projectKey} -Dsonar.sources=${sources} -Dsonar.branch=${context.env.BRANCH_NAME} -Dsonar.projectName=\"${fullJobName}\" -Dsonar.host.url=%SONAR_HOST_URL% -Dsonar.login=%SONAR_AUTH_TOKEN% -Dsonar.github.oauth=${context.env.GITHUB_TOKEN} -Dsonar.analysis.mode=preview -Dsonar.github.pullRequest=\"${prNumber}\" -Dsonar.github.repository=${orgName}/${repoName}"
@@ -268,7 +268,7 @@ class Packaging {
     def static endAnalyzer(context)
     {
         def fullJobName = Utilities.getRepoName(context)
-        context.withSonarQubeEnv('VC Sonar Server') {
+        context.withSonarQubeEnv('TCS Sonar Server') {
             context.bat "dotnet sonarscanner end /d:sonar.login=%SONAR_AUTH_TOKEN%"
         }
     }
