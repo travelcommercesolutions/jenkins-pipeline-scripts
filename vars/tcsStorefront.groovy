@@ -95,7 +95,6 @@ def call(body) {
                 }
             }
 
-			def version = Utilities.getPackageVersion(this)
 			def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
 
 			stage('Publish')
