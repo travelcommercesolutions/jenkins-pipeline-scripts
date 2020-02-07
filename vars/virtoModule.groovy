@@ -29,7 +29,7 @@ import jobs.scripts.*
 		SETTINGS.setRegion('module')
 
 		try {
-			Utilities.notifyBuildStatus(this, SETTINGS['of365hook'], '', 'STARTED')
+			// Utilities.notifyBuildStatus(this, SETTINGS['of365hook'], '', 'STARTED')
 
 			stage('Checkout') {
 				timestamps {
