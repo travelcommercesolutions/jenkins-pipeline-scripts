@@ -170,12 +170,12 @@ import jobs.scripts.*
 		}
 		finally {
 			Packaging.stopDockerTestEnvironment(this, dockerTag)
-			Utilities.generateAllureReport(this)
-			Utilities.notifyBuildStatus(this, SETTINGS['of365hook'], "Build finished", currentBuild.currentResult)
-			step([$class: 'LogParserPublisher',
-				  failBuildOnError: false,
-				  parsingRulesPath: env.LOG_PARSER_RULES,
-				  useProjectRule: false])
+			// Utilities.generateAllureReport(this)
+			// Utilities.notifyBuildStatus(this, SETTINGS['of365hook'], "Build finished", currentBuild.currentResult)
+			// step([$class: 'LogParserPublisher',
+			// 	  failBuildOnError: false,
+			// 	  parsingRulesPath: env.LOG_PARSER_RULES,
+			// 	  useProjectRule: false])
 			Utilities.cleanPRFolder(this)
 		}
 
