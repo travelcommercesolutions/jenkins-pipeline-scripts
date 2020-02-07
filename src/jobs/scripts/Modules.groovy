@@ -127,7 +127,7 @@ class Modules {
 
         context.echo "parsing $manifestPath"
         def manifestContent = context.readFile(manifestPath)
-        def manifest = new XmlSlurper().parseText(manifestContent)
+        def manifest = new XmlSlurper().parseText(manifestContent)  // UTF-8 wo BOM only stream of bytes
 
         def id = manifest.id.toString()
 
