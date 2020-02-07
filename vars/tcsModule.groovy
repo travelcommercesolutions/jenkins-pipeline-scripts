@@ -27,8 +27,6 @@ import jobs.scripts.*
 		SETTINGS = new Settings(settingsFileContent)
 		SETTINGS.setEnvironment(env.BRANCH_NAME)
 		SETTINGS.setRegion('module')
-		if(env.BRANCH_NAME == '1.1.3')
-			SETTINGS.setEnvironment('master')
 
 		try {
 			//step([$class: 'GitHubCommitStatusSetter', contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'ci.virtocommerce.com'], statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', message: 'Building on Virto Commerce CI', state: 'PENDING']]]])		
@@ -141,7 +139,7 @@ import jobs.scripts.*
 				// }
 			}
 
-			if (env.BRANCH_NAME == '1.1.3' || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master'){
+			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master'){
 				stage('Publish')
 				{
 					timestamps {
