@@ -29,8 +29,6 @@ import jobs.scripts.*
 		SETTINGS.setRegion('module')
 
 		try {
-			//step([$class: 'GitHubCommitStatusSetter', contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'ci.virtocommerce.com'], statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', message: 'Building on Virto Commerce CI', state: 'PENDING']]]])		
-			//Utilities.updateGithubCommitStatus(this, 'PENDING', 'Building on Virto Commerce CI')
 			Utilities.notifyBuildStatus(this, SETTINGS['of365hook'], '', 'STARTED')
 
 			stage('Checkout') {
@@ -48,7 +46,6 @@ import jobs.scripts.*
 			stage('Build')
 			{
 				timestamps { 
-												
 					Packaging.startAnalyzer(this)
 					Packaging.buildSolutions(this)
 				}
@@ -75,7 +72,7 @@ import jobs.scripts.*
 				}
 			}			
 
-			if (env.BRANCH_NAME=='1.1.3' || env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'release') {
+			if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'release') {
 				stage('Create Test Environment') {
 					timestamps { 
 						// Start docker environment
@@ -145,31 +142,18 @@ import jobs.scripts.*
 					timestamps {
 						def moduleId = Modules.getModuleId(this)
 						def artifacts = findFiles(glob: 'artifacts\\*.zip')
-						Packaging.saveArtifact(this, 'vc', 'module', moduleId, artifacts[0].path)
-						if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =='1.1.3') {
+						Packaging.saveArtifact(this, 'tcs', 'module', moduleId, artifacts[0].path)
+						if (env.BRANCH_NAME == 'master') {
 							processManifests(true) // publish artifacts to github releases
 						}
 						switch(env.BRANCH_NAME){
-							case ['master', '1.1.3']:
+							case ['master']:
 								Packaging.createNugetPackages(this)
 								break
 							case 'dev':
 								Utilities.runSharedPS(this, "${deployScript}", "-SubscriptionID ${SETTINGS['subscriptionID']} -WebAppName ${SETTINGS['appName']} -ResourceGroupName ${SETTINGS['resourceGroupName']}")
 								break
 						}
-					}
-				}
-			}
-
-			if(Utilities.getRepoName(this) == 'vc-module-pagebuilder'){
-				stage('Delivery to virtocommerce.com'){
-					timestamps{
-						SETTINGS.setRegion('virtocommerce')
-						SETTINGS.setEnvironment('dev')
-						if(env.BRANCH_NAME == 'master'){
-							SETTINGS.setEnvironment('master')
-						}
-						Utilities.runSharedPS(this, "${deployScript}", "-SubscriptionID ${SETTINGS['subscriptionID']} -WebAppName ${SETTINGS['appName']} -ResourceGroupName ${SETTINGS['resourceGroupName']}")
 					}
 				}
 			}
@@ -192,16 +176,6 @@ import jobs.scripts.*
 				  failBuildOnError: false,
 				  parsingRulesPath: env.LOG_PARSER_RULES,
 				  useProjectRule: false])
-			// if(currentBuild.result != 'FAILURE') {
-			// 	step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
-			// }
-			// else {
-			// 	def log = currentBuild.rawBuild.getLog(300)
-			// 	def failedStageLog = Utilities.getFailedStageStr(log)
-			// 	def failedStageName = Utilities.getFailedStageName(failedStageLog)
-			// 	def mailBody = Utilities.getMailBody(this, failedStageName, failedStageLog)
-			// 	emailext body:mailBody, subject: "${env.JOB_NAME}:${env.BUILD_NUMBER} - ${currentBuild.currentResult}", recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']]
-			// }
 			Utilities.cleanPRFolder(this)
 		}
 
