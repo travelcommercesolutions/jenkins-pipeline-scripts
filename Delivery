@@ -317,7 +317,7 @@ pipeline {
             }
             steps{
                 script{
-                    runPS("VC-Module2Azure.ps1", "-Prefix ${SETTINGS['prefix']} -ModuleName ${MODULE_ID} -Path2Zip ${MODULE_FILE} -BranchName ${ENV_NAME}")
+                    runPS("VC-Module2AzureDev.ps1", "-Prefix ${SETTINGS['prefix']} -ModuleName ${MODULE_ID} -Path2Zip ${MODULE_FILE} -BranchName ${ENV_NAME}")
                 }
             }
         }
