@@ -93,11 +93,11 @@ def call(body) {
 				timestamps
 				{
 					def notes = Utilities.getReleaseNotes(this, webProject)
-			// 		if (env.BRANCH_NAME == 'qa' || env.BRANCH_NAME == 'master')
-			// 		{
-			// 			Packaging.publishRelease(this, version, notes)
-			// 		}
-			// 		Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
+					if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master')
+					{
+						//Packaging.publishRelease(this, version, notes)
+					}
+					Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
 				}
 			}
 
