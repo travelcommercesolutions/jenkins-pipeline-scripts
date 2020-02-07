@@ -6,12 +6,12 @@ import groovy.json.JsonSlurperClassic
 def SETTINGS
 
 def DELIVERY_BACKEND = false
-def DELIVERY_FRONTEND = true
+def DELIVERY_FRONTEND = false
 def DELIVERY_THEME = false
 def UPDATE_CS = false
 def UPDATE_PLATFORM = false
 def UPDATE_IMAGE = false
-def UPDATE_MODULE = true
+def UPDATE_MODULE = false
 def LOGIC_APPS = false
 
 def UNSTABLE = false
