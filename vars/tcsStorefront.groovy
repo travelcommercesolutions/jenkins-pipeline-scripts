@@ -12,6 +12,7 @@ def call(body) {
 		properties([disableConcurrentBuilds()])
 		projectType = config.projectType
 
+	    def storeName = config.sampleStore
 		projectType = "MSBUILD"
 		def solution = config.solution
 		solution = "VirtoCommerce.Storefront.sln"
@@ -86,6 +87,15 @@ def call(body) {
 					Packaging.checkAnalyzerGate(this)
 				}
 			}
+
+			def artifacts = findFiles(glob: 'artifacts/*.zip')
+			if(params.themeResultZip != null){
+                for(artifact in artifacts){
+                    bat "copy /Y \"${artifact.path}\" \"${params.themeResultZip}\""
+                }
+            }
+
+			def version = Utilities.getPackageVersion(this)
 			def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
 
 			stage('Publish')
@@ -95,6 +105,10 @@ def call(body) {
 					def notes = Utilities.getReleaseNotes(this, webProject)
 					if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master')
 					{
+						if(!Utilities.isPullRequest(this))
+						{
+							Packaging.saveArtifact(this, 'tcs', 'storefront', config.sampleStore, artifacts[0].path)
+						}
 						//Packaging.publishRelease(this, version, notes)
 					}
 					Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
