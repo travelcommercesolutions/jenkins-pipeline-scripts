@@ -18,6 +18,15 @@ Function Create-Authorization([string] $appId, [string] $secret)
     return $headerValue
 }
 
+Function Get-EnvVar{
+    param(
+        $Prefix,
+        $Name
+    )
+    $varName = "$($Prefix)$($Name)"
+    return (Get-Item Env:$varName).Value
+}
+
 function Invoke-MultipartFormDataUpload
 {
     [CmdletBinding()]
