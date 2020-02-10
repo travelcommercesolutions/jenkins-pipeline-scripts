@@ -61,7 +61,7 @@ $sourcewebapp_msdeployUrl = "https://${WebAppPublicName}.scm.azurewebsites.net/m
 # Upload Storefront
 if($StorefrontDir){
     Write-Output "Upload Storefront"
-    & $msdeploy -verb:sync -dest:contentPath="D:\home\site\wwwroot\",computerName=$sourcewebapp_msdeployUrl,publishSettings=$FrontendPublishProfile -source:contentPath=$StorefrontDir
+    & $msdeploy -verb:sync -dest:contentPath="D:\home\site\wwwroot\storefront",computerName=$sourcewebapp_msdeployUrl,publishSettings=$FrontendPublishProfile -source:contentPath=$StorefrontDir
 }
 
 # Upload Theme
@@ -76,7 +76,7 @@ $dirpath = "Themes"
 Write-Output "AzCopy $elecPath"
 $accountname = "qademovc"
 $token = $env:AzureBlobToken
-& "${env:Utils}\AzCopy10\AzCopy" sync $ThemeDir https://$($accountname).blob.core.windows.net/$ContainerName/$($dirpath)$token --delete-destination=true #/DestKey:$accountKey /S
+# & "${env:Utils}\AzCopy10\AzCopy" sync $ThemeDir https://$($accountname).blob.core.windows.net/$ContainerName/$($dirpath)$token --delete-destination=true #/DestKey:$accountKey /S
 
 Write-Host "Start Backend $WebAppName"
 
