@@ -140,7 +140,7 @@ import jobs.scripts.*
 				stage('Publish')
 				{
 					timestamps {
-						def moduleId = "TCS.Core" // Modules.getModuleId(this)
+						def moduleId = Modules.getModuleId(this)
 						def artifacts = findFiles(glob: 'artifacts\\*.zip')
 						Packaging.saveArtifact(this, 'tcs', 'module', moduleId, artifacts[0].path)
 						if (env.BRANCH_NAME == 'master') {
