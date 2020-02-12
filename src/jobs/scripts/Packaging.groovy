@@ -168,11 +168,11 @@ class Packaging {
         }
         else
         {
-            // context.dir("${context.env.WORKSPACE}\\${websiteDir}")
-            // {
-            //     context.bat "npm install --prefer-offline"
-            //     context.bat "npm run build"
-            // }
+            context.dir("${context.env.WORKSPACE}\\${websiteDir}")
+            {
+                context.bat "npm install --prefer-offline"
+                context.bat "npm run build"
+            }
             context.bat "\"${context.tool DefaultMSBuild}\" \"${webProject}\" /nologo /verbosity:m /p:Configuration=Release /p:Platform=\"Any CPU\" /p:DebugType=none \"/p:OutputPath=$tempFolder\""
         }
 
