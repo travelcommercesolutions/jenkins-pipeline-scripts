@@ -12,7 +12,7 @@ def call(body) {
 		properties([disableConcurrentBuilds()])
 		projectType = config.projectType
 
-	    def storeName = "storefront" //config.sampleStore
+	    def storeName = config.sampleStore
 		projectType = "MSBUILD"
 		def solution = config.solution
 		solution = "VirtoCommerce.Storefront.sln"
@@ -106,7 +106,7 @@ def call(body) {
 					{
 						if(!Utilities.isPullRequest(this))
 						{
-							Packaging.saveArtifact(this, 'tcs', 'storefront', config.sampleStore, artifacts[0].path)
+							Packaging.saveArtifact(this, 'tcs', 'storefront', 'storefront', artifacts[0].path) // config.sampleStore for projects w def store
 						}
 						//Packaging.publishRelease(this, version, notes)
 					}
