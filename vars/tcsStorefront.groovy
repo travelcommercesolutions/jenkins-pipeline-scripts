@@ -12,7 +12,7 @@ def call(body) {
 		properties([disableConcurrentBuilds()])
 		projectType = config.projectType
 
-	    def storeName = config.sampleStore
+	    def storeName = "storefront" //config.sampleStore
 		projectType = "MSBUILD"
 		def solution = config.solution
 		solution = "VirtoCommerce.Storefront.sln"
