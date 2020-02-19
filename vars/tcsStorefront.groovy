@@ -110,7 +110,7 @@ def call(body) {
 						}
 						//Packaging.publishRelease(this, version, notes)
 					}
-					Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
+					// Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
 				}
 			}
 
