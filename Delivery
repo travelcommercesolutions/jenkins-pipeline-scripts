@@ -105,7 +105,7 @@ pipeline {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
 
-                    SETTINGS.setEnvironment('DEV')
+                    SETTINGS.setEnvironment("${ENV_NAME}")
 
                     def webAppName = SETTINGS['appName']
                     def webAppPublicName = SETTINGS['webAppPublicName']
