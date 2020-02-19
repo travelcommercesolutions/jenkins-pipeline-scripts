@@ -106,7 +106,7 @@ def call(body) {
 					{
 						if(!Utilities.isPullRequest(this))
 						{
-							Packaging.saveArtifact(this, 'tcs', 'storefront', 'storefront', artifacts[0].path) // config.sampleStore for projects w def store
+							Packaging.saveArtifact(this, 'tcs', 'storefront', '', artifacts[0].path) // config.sampleStore for projects w def store
 						}
 						//Packaging.publishRelease(this, version, notes)
 					}
