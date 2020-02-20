@@ -142,7 +142,7 @@ import jobs.scripts.*
 					timestamps {
 						def moduleId = Modules.getModuleId(this)
 						def artifacts = findFiles(glob: 'artifacts\\*.zip')
-						Packaging.saveArtifact(this, 'tcs', 'modules', moduleId, artifacts[0].path)
+						Packaging.saveArtifact(this, 'tcs', 'module', moduleId, artifacts[0].path)
 						if (env.BRANCH_NAME == 'master') {
 							processManifests(true) // publish artifacts to github releases
 						}

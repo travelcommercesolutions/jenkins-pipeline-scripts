@@ -81,7 +81,7 @@ pipeline {
                 script{
                     checkout scm
                     def csSrc = "${env.SOLUTION_FOLDER}\\tcs\\${ENV_NAME}"
-                    def modulesRoot = "${env.WORKSPACE}\\CS\\modules"
+                    def modulesRoot = "${env.WORKSPACE}\\CS\\module"
                     def platformRoot = "${env.WORKSPACE}\\CS\\platform"
 
                     // SETTINGS.setEnvironment('DEV2')
@@ -91,7 +91,7 @@ pipeline {
                     powershell "Remove-Item ${modulesRoot}\\Travel* -Recurse -Force"
                     powershell "Remove-Item ${modulesRoot}\\TCS* -Recurse -Force"
                     powershell "Copy-Item -Path ${csSrc}\\* -Destination ${env.WORKSPACE}\\CS -Recurse -Force"
-                    // powershell "Rename-Item -Path ${modulesRoot} -NewName modules"
+                    powershell "Rename-Item -Path ${modulesRoot} -NewName modules"
                 }
             }
         }
