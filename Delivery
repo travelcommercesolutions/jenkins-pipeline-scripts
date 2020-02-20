@@ -96,7 +96,7 @@ pipeline {
             }
         }
 
-        stage("Update Solution"){
+        stage("Update Platform and Modules"){
             when {
                 expression {
                     UPDATE_CS
@@ -118,6 +118,19 @@ pipeline {
                             // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                             "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                     }
+                }
+            }
+        }
+
+        stage("Update Storefront"){
+            when {
+                expression {
+                    UPDATE_CS
+                }
+            }
+            steps {
+                script{
+                    def csRoot = "${env.WORKSPACE}\\CS"
 
                     SETTINGS.setEnvironment("CICD_DEV_TEST")
 
