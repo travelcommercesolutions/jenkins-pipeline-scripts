@@ -106,7 +106,7 @@ pipeline {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
 
-                    SETTINGS.setEnvironment("DEV")
+                    SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
 
                     def webAppName = SETTINGS['appName']
                     def webAppPublicName = SETTINGS['webAppPublicName']
@@ -132,7 +132,7 @@ pipeline {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
 
-                    SETTINGS.setEnvironment("CICD_DEV_TEST")
+                    SETTINGS.setEnvironment("TCS-PUBLIC-${ENV_NAME}")
 
                     def webAppName = SETTINGS['appName']
                     def webAppPublicName = SETTINGS['webAppPublicName']
