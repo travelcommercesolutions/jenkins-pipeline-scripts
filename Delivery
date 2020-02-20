@@ -106,7 +106,7 @@ pipeline {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
 
-                    SETTINGS.setEnvironment("${ENV_NAME}")
+                    SETTINGS.setEnvironment("DEV")
 
                     def webAppName = SETTINGS['appName']
                     def webAppPublicName = SETTINGS['webAppPublicName']
@@ -115,7 +115,21 @@ pipeline {
                     def blobToken = SETTINGS['blobToken']
                     withEnv(["AzureBlobToken=${blobToken}"]){
                         Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
-                            "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                    }
+
+                    SETTINGS.setEnvironment("CICD_DEV_TEST")
+
+                    def webAppName = SETTINGS['appName']
+                    def webAppPublicName = SETTINGS['webAppPublicName']
+                    def resourceGroupName = SETTINGS['resourceGroupName']
+                    def subscriptionID = SETTINGS['subscriptionID']
+                    def blobToken = SETTINGS['blobToken']
+                    withEnv(["AzureBlobToken=${blobToken}"]){
+                        Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                            "-StorefrontDir ${csRoot}\\storefront -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            
                     }
                 }
             }

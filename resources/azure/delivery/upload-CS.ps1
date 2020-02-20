@@ -61,7 +61,7 @@ $sourcewebapp_msdeployUrl = "https://${WebAppPublicName}.scm.azurewebsites.net/m
 # Upload Storefront
 if($StorefrontDir){
     Write-Output "Upload Storefront"
-    & $msdeploy -verb:sync -dest:contentPath="D:\home\site\wwwroot\storefront",computerName=$sourcewebapp_msdeployUrl,publishSettings=$FrontendPublishProfile -source:contentPath=$StorefrontDir
+    & $msdeploy -verb:sync -dest:contentPath="D:\home\site\wwwroot",computerName=$sourcewebapp_msdeployUrl,publishSettings=$FrontendPublishProfile -source:contentPath=$StorefrontDir
 }
 
 # Upload Theme
