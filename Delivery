@@ -87,6 +87,8 @@ pipeline {
                     // SETTINGS.setEnvironment('DEV2')
 
                     // powershell "${env.WORKSPACE}\\resources\\azure\\delivery\\get-modules.ps1 -PlatformPath ${platformRoot} -ModulesPath ${modulesRoot} -AppName \"${SETTINGS['appName']}\" -ResourceGroupName \"${SETTINGS['resourceGroupName']}\" -SubscriptionID \"${SETTINGS['subscriptionID']}\" -ErrorAction Stop"
+                    //Cleaning environment before actions to deploy
+                    powershell "Remove-Item ${env.WORKSPACE}\\CS\\* -Recurse -Force"
                     powershell "Expand-Archive -Path ${env.SOLUTION_FOLDER}\\etalon-app.zip -DestinationPath ${env.WORKSPACE}\\CS -Force"
                     powershell "Remove-Item ${modulesRoot}\\Travel* -Recurse -Force"
                     powershell "Remove-Item ${modulesRoot}\\TCS* -Recurse -Force"
