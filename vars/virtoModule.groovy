@@ -72,69 +72,69 @@ import jobs.scripts.*
 				}
 			}			
 
-			if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'release') {
-				stage('Create Test Environment') {
-					timestamps { 
-						// Start docker environment
-						Packaging.startDockerTestEnvironment(this, dockerTag)
-					}
-				}
+			// if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'release') {
+			// 	stage('Create Test Environment') {
+			// 		timestamps { 
+			// 			// Start docker environment
+			// 			Packaging.startDockerTestEnvironment(this, dockerTag)
+			// 		}
+			// 	}
 
-				stage('Install VC Modules'){
-					timestamps{
+			// 	stage('Install VC Modules'){
+			// 		timestamps{
 
-						// install modules
-						Packaging.installModules(this, 0)
+			// 			// install modules
+			// 			Packaging.installModules(this, 0)
 
-                        // install module
-                        Modules.installModuleArtifacts(this)
+            //             // install module
+            //             Modules.installModuleArtifacts(this)
 
-						//check installed modules
-						Packaging.checkInstalledModules(this)
+			// 			//check installed modules
+			// 			Packaging.checkInstalledModules(this)
 
-					}
-				}
+			// 		}
+			// 	}
 
-				stage('Install Sample Data'){
-					timestamps{
-						// now create sample data
-						Packaging.createSampleData(this)
-					}
-				}
+			// 	stage('Install Sample Data'){
+			// 		timestamps{
+			// 			// now create sample data
+			// 			Packaging.createSampleData(this)
+			// 		}
+			// 	}
 
-				stage('Theme Build and Deploy'){
-					timestamps {
-						def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
-						def themeJobName = "../vc-theme-default/${env.BRANCH_NAME}"
-						if(env.BRANCH_NAME == "1.1.3")
-							themeJobName = "../vc-theme-default/master"
-						build(job: themeJobName, parameters: [string(name: 'themeResultZip', value: themePath)])
-						Packaging.installTheme(this, themePath)
-					}
-				}
+			// 	stage('Theme Build and Deploy'){
+			// 		timestamps {
+			// 			def themePath = "${env.WORKSPACE}@tmp\\theme.zip"
+			// 			def themeJobName = "../vc-theme-default/${env.BRANCH_NAME}"
+			// 			if(env.BRANCH_NAME == "1.1.3")
+			// 				themeJobName = "../vc-theme-default/master"
+			// 			build(job: themeJobName, parameters: [string(name: 'themeResultZip', value: themePath)])
+			// 			Packaging.installTheme(this, themePath)
+			// 		}
+			// 	}
 
-				stage("Swagger Schema Validation"){
-					timestamps{
-						def tempFolder = Utilities.getTempFolder(this)
-						def schemaPath = "${tempFolder}\\swagger.json"
+			// 	stage("Swagger Schema Validation"){
+			// 		timestamps{
+			// 			def tempFolder = Utilities.getTempFolder(this)
+			// 			def schemaPath = "${tempFolder}\\swagger.json"
 
-						Utilities.validateSwagger(this, schemaPath)
-					}
-				}	
+			// 			Utilities.validateSwagger(this, schemaPath)
+			// 		}
+			// 	}	
 
-				stage('Integration Tests')
-				{
-					timestamps {
-						Modules.runIntegrationTests(this)
-					}
-				}
+			// 	stage('Integration Tests')
+			// 	{
+			// 		timestamps {
+			// 			Modules.runIntegrationTests(this)
+			// 		}
+			// 	}
 
-				// stage('E2E'){
-				// 	timestamps{
-				// 		Utilities.runE2E(this)
-				// 	}
-				// }
-			}
+			// 	// stage('E2E'){
+			// 	// 	timestamps{
+			// 	// 		Utilities.runE2E(this)
+			// 	// 	}
+			// 	// }
+			// }
 
 			if (env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'master'){
 				stage('Publish')
