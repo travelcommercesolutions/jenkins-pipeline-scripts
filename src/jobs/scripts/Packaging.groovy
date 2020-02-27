@@ -174,7 +174,7 @@ class Packaging {
                 context.bat "npm run build"
             }
             context.bat "\"${context.tool DefaultMSBuild}\" \"${webProject}\" /nologo /verbosity:m /p:Configuration=Release /p:Platform=\"Any CPU\" /p:DebugType=none \"/p:OutputPath=$tempFolder\""
-            context.powershell script: "Copy-Item -Path ${context.env.WORKSPACE}\\${websiteDir}\\App_Data -Destination ${tempFolder}\\App_Data -Recurse -Force"
+            context.powershell script: "Copy-Item -Path ${context.env.WORKSPACE}\\${websiteDir}\\App_Data\\* -Destination ${tempFolder}\\App_Data -Recurse -Force"
         }
 
         (new AntBuilder()).zip(destfile: "${packagesDir}\\${zipArtifact}-${version}.zip", basedir: "${websitePath}")
