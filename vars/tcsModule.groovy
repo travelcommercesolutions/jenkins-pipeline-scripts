@@ -143,17 +143,17 @@ import jobs.scripts.*
 						def moduleId = Modules.getModuleId(this)
 						def artifacts = findFiles(glob: 'artifacts\\*.zip')
 						Packaging.saveArtifact(this, 'tcs', 'module', moduleId, artifacts[0].path)
-						if (env.BRANCH_NAME == 'master') {
-							processManifests(true) // publish artifacts to github releases
-						}
-						switch(env.BRANCH_NAME){
-							case ['master']:
-								Packaging.createNugetPackages(this)
-								break
-							case 'dev':
-								Utilities.runSharedPS(this, "${deployScript}", "-SubscriptionID ${SETTINGS['subscriptionID']} -WebAppName ${SETTINGS['appName']} -ResourceGroupName ${SETTINGS['resourceGroupName']}")
-								break
-						}
+						// if (env.BRANCH_NAME == 'master') {
+						// 	processManifests(true) // publish artifacts to github releases
+						// }
+						// switch(env.BRANCH_NAME){
+						// 	case ['master']:
+						// 		Packaging.createNugetPackages(this)
+						// 		break
+						// 	case 'dev':
+						// 		Utilities.runSharedPS(this, "${deployScript}", "-SubscriptionID ${SETTINGS['subscriptionID']} -WebAppName ${SETTINGS['appName']} -ResourceGroupName ${SETTINGS['resourceGroupName']}")
+						// 		break
+						// }
 					}
 				}
 			}
