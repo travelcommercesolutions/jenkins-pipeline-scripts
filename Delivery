@@ -158,7 +158,7 @@ pipeline {
                     def csRoot = "${env.WORKSPACE}\\CS"
                     switch(ENV_NAME){
                         case 'DEV':
-                        SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
+                        SETTINGS.setEnvironment("TCS-PUBLIC-${ENV_NAME}")
 
                         def webAppName = SETTINGS['appName']
                         def webAppPublicName = SETTINGS['webAppPublicName']
@@ -173,7 +173,7 @@ pipeline {
                         break
                         case 'QA':
                         1.upto(2) {
-                            SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}-EU0${it}")
+                            SETTINGS.setEnvironment("TCS-PUBLIC-${ENV_NAME}-EU0${it}")
 
                             def webAppName = SETTINGS['appName']
                             def webAppPublicName = SETTINGS['webAppPublicName']
