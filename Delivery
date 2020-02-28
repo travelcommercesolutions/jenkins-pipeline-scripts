@@ -79,8 +79,12 @@ pipeline {
             }
             steps{
                 script{
-                    checkout scm
-                    def csSrc = "${env.SOLUTION_FOLDER}\\tcs\\${ENV_NAME}"
+                    def csSrc = "${env.SOLUTION_FOLDER}\\tcs\\master"
+                    switch("${ENV_NAME}"){
+                        case 'dev':
+                        csSrc = "${env.SOLUTION_FOLDER}\\tcs\\dev"
+                        break
+                    }
                     def modulesRoot = "${env.WORKSPACE}\\CS\\module"
                     def platformRoot = "${env.WORKSPACE}\\CS\\platform"
 
@@ -98,7 +102,7 @@ pipeline {
             }
         }
 
-        stage("Update Platform and Modules"){
+        stage("Delivering Platform and Modules"){
             when {
                 expression {
                     UPDATE_CS
@@ -107,24 +111,43 @@ pipeline {
             steps {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
+                    switch("${ENV_NAME}"){
+                        case 'dev':
+                        SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
 
-                    SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
+                        def webAppName = SETTINGS['appName']
+                        def webAppPublicName = SETTINGS['webAppPublicName']
+                        def resourceGroupName = SETTINGS['resourceGroupName']
+                        def subscriptionID = SETTINGS['subscriptionID']
+                        def blobToken = SETTINGS['blobToken']
+                        withEnv(["AzureBlobToken=${blobToken}"]){
+                            Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                                // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            }
+                        break
+                        case 'qa':
+                        1.upto(2) {
+                            SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}-EU0${it}")
 
-                    def webAppName = SETTINGS['appName']
-                    def webAppPublicName = SETTINGS['webAppPublicName']
-                    def resourceGroupName = SETTINGS['resourceGroupName']
-                    def subscriptionID = SETTINGS['subscriptionID']
-                    def blobToken = SETTINGS['blobToken']
-                    withEnv(["AzureBlobToken=${blobToken}"]){
-                        Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
-                            // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
-                            "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            def webAppName = SETTINGS['appName']
+                            def webAppPublicName = SETTINGS['webAppPublicName']
+                            def resourceGroupName = SETTINGS['resourceGroupName']
+                            def subscriptionID = SETTINGS['subscriptionID']
+                            def blobToken = SETTINGS['blobToken']
+                            withEnv(["AzureBlobToken=${blobToken}"]){
+                                Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                                    // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                    "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                }
+                            }
+                        break
+                        }
                     }
                 }
             }
-        }
 
-        stage("Update Storefront"){
+        stage("Delivering Storefront"){
             when {
                 expression {
                     UPDATE_CS
@@ -133,22 +156,41 @@ pipeline {
             steps {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
+                    switch("${ENV_NAME}"){
+                        case 'dev':
+                        SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
 
-                    SETTINGS.setEnvironment("TCS-PUBLIC-${ENV_NAME}")
+                        def webAppName = SETTINGS['appName']
+                        def webAppPublicName = SETTINGS['webAppPublicName']
+                        def resourceGroupName = SETTINGS['resourceGroupName']
+                        def subscriptionID = SETTINGS['subscriptionID']
+                        def blobToken = SETTINGS['blobToken']
+                        withEnv(["AzureBlobToken=${blobToken}"]){
+                            Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                                // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            }
+                        break
+                        case 'qa':
+                        1.upto(2) {
+                            SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}-EU0${it}")
 
-                    def webAppName = SETTINGS['appName']
-                    def webAppPublicName = SETTINGS['webAppPublicName']
-                    def resourceGroupName = SETTINGS['resourceGroupName']
-                    def subscriptionID = SETTINGS['subscriptionID']
-                    def blobToken = SETTINGS['blobToken']
-                    withEnv(["AzureBlobToken=${blobToken}"]){
-                        Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
-                            "-StorefrontDir ${csRoot}\\storefront -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
-                            
+                            def webAppName = SETTINGS['appName']
+                            def webAppPublicName = SETTINGS['webAppPublicName']
+                            def resourceGroupName = SETTINGS['resourceGroupName']
+                            def subscriptionID = SETTINGS['subscriptionID']
+                            def blobToken = SETTINGS['blobToken']
+                            withEnv(["AzureBlobToken=${blobToken}"]){
+                                Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                                    // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                    "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                }
+                            }
+                        break
+                        }
                     }
                 }
             }
-        }
         
         stage("Delivering Backend"){
             when{
