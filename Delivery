@@ -168,7 +168,7 @@ pipeline {
                         withEnv(["AzureBlobToken=${blobToken}"]){
                             Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
                                 // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
-                                "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                "-StorefrontDir ${csRoot}\\storefront -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                             }
                         break
                         case 'QA':
@@ -183,7 +183,7 @@ pipeline {
                             withEnv(["AzureBlobToken=${blobToken}"]){
                                 Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
                                     // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
-                                    "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                    "-StorefrontDir ${csRoot}\\storefront -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                                 }
                             }
                         break
