@@ -80,7 +80,7 @@ pipeline {
             steps{
                 script{
                     def csSrc = "${env.SOLUTION_FOLDER}\\tcs\\master"
-                    switch("${ENV_NAME}"){
+                    switch(ENV_NAME){
                         case 'dev':
                         csSrc = "${env.SOLUTION_FOLDER}\\tcs\\dev"
                         break
@@ -111,7 +111,7 @@ pipeline {
             steps {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
-                    switch("${ENV_NAME}"){
+                    switch(ENV_NAME){
                         case 'dev':
                         SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
 
@@ -156,7 +156,7 @@ pipeline {
             steps {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
-                    switch("${ENV_NAME}"){
+                    switch(ENV_NAME){
                         case 'dev':
                         SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
 
