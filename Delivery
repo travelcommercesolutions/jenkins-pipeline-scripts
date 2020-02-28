@@ -81,7 +81,7 @@ pipeline {
                 script{
                     def csSrc = "${env.SOLUTION_FOLDER}\\tcs\\master"
                     switch(ENV_NAME){
-                        case 'dev':
+                        case 'DEV':
                         csSrc = "${env.SOLUTION_FOLDER}\\tcs\\dev"
                         break
                     }
@@ -112,7 +112,7 @@ pipeline {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
                     switch(ENV_NAME){
-                        case 'dev':
+                        case 'DEV':
                         SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
 
                         def webAppName = SETTINGS['appName']
@@ -126,7 +126,7 @@ pipeline {
                                 "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                             }
                         break
-                        case 'qa':
+                        case 'QA':
                         1.upto(2) {
                             SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}-EU0${it}")
 
@@ -157,7 +157,7 @@ pipeline {
                 script{
                     def csRoot = "${env.WORKSPACE}\\CS"
                     switch(ENV_NAME){
-                        case 'dev':
+                        case 'DEV':
                         SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}")
 
                         def webAppName = SETTINGS['appName']
@@ -171,7 +171,7 @@ pipeline {
                                 "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                             }
                         break
-                        case 'qa':
+                        case 'QA':
                         1.upto(2) {
                             SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}-EU0${it}")
 
