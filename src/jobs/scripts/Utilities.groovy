@@ -32,11 +32,6 @@ class Utilities {
         return "travelcommercesolutions"
     }
 
-        def static getReleaser(context)
-    {
-        return "romansoftteco"
-    }
-
     def static getRepoNamePrefix(context){
         def repoName = getRepoName(context)
         def tokens = repoName.tokenize("-")
