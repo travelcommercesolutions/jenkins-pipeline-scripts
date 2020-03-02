@@ -2,8 +2,6 @@ package jobs.scripts;
 
 import groovy.json.JsonSlurperClassic
 
-def SETTINGS
-
 class Packaging {
 
     private static String DefaultBranchOrCommitPR = '${sha1}'
@@ -342,7 +340,7 @@ class Packaging {
 
 	def static publishGithubRelease(context, version, releaseNotes, artifact)   
 	{
-
+        def SETTINGS
         def settingsFileContent
         configFileProvider([configFile(fileId: 'shared_lib_settings', variable: 'SETTINGS_FILE')]) {
             settingsFileContent = readFile(SETTINGS_FILE)
