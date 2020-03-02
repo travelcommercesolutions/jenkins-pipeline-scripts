@@ -348,9 +348,9 @@ class Packaging {
         SETTINGS = new Settings(settingsFileContent)
         SETTINGS.setEnvironment('master')
 
-        def RELEASER = "${SETTINGS['releaser']}"
+        def RELEASER = ${SETTINGS['releaser']}
 		def REPO_NAME = Utilities.getRepoName(context)
-		def REPO_ORG = "${SETTINGS['orgName']}"
+		def REPO_ORG = ${SETTINGS['orgName']}
 
         def platformLineSeparator = System.properties['line.separator']
         releaseNotes = releaseNotes.denormalize().replace(platformLineSeparator, '<br>')
