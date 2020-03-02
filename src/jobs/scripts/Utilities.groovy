@@ -29,7 +29,12 @@ class Utilities {
 
     def static getOrgName(context)
     {
-        return "VirtoCommerce"
+        return "travelcommercesolutions"
+    }
+
+        def static getReleaser(context)
+    {
+        return "romansoftteco"
     }
 
     def static getRepoNamePrefix(context){

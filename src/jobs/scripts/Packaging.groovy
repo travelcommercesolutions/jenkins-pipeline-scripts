@@ -340,17 +340,9 @@ class Packaging {
 
 	def static publishGithubRelease(context, version, releaseNotes, artifact)   
 	{
-        def SETTINGS
-        def settingsFileContent
-        configFileProvider([configFile(fileId: 'shared_lib_settings', variable: 'SETTINGS_FILE')]) {
-            settingsFileContent = readFile(SETTINGS_FILE)
-        }
-        SETTINGS = new Settings(settingsFileContent)
-        SETTINGS.setEnvironment('master')
-
-        def RELEASER = ${SETTINGS['releaser']}
+        def RELEASER = Utilities.getReleaser(context)
 		def REPO_NAME = Utilities.getRepoName(context)
-		def REPO_ORG = ${SETTINGS['orgName']}
+		def REPO_ORG = Utilities.getOrgName(context)
 
         def platformLineSeparator = System.properties['line.separator']
         releaseNotes = releaseNotes.denormalize().replace(platformLineSeparator, '<br>')
