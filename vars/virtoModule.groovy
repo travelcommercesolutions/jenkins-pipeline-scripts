@@ -272,7 +272,7 @@ def processManifest(def publish, def manifestPath)
 				packageUrl,
 				iconUrl)
 
-			publishTweet("${title} ${version} published ${projectUrl} #virtocommerceci")
+			// publishTweet("${title} ${version} published ${projectUrl} #virtocommerceci")
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package jobs.scripts;
 
+import groovy.json.JsonSlurperClassic
+
 class Packaging {
 
     private static String DefaultBranchOrCommitPR = '${sha1}'
@@ -338,15 +340,24 @@ class Packaging {
 
 	def static publishGithubRelease(context, version, releaseNotes, artifact)   
 	{
+
+        def settingsFileContent
+        configFileProvider([configFile(fileId: 'shared_lib_settings', variable: 'SETTINGS_FILE')]) {
+            settingsFileContent = readFile(SETTINGS_FILE)
+        }
+        SETTINGS = new Settings(settingsFileContent)
+        SETTINGS.setEnvironment('master')
+
+        def RELEASER = "${SETTINGS['releaser']}"
 		def REPO_NAME = Utilities.getRepoName(context)
-		def REPO_ORG = Utilities.getOrgName(context)
+		def REPO_ORG = "${SETTINGS['orgName']}"
 
         def platformLineSeparator = System.properties['line.separator']
         releaseNotes = releaseNotes.denormalize().replace(platformLineSeparator, '<br>')
         releaseNotes = releaseNotes.replace("\"", "^\"")
 
-		context.bat "${context.env.Utils}\\github-release release --user $REPO_ORG --repo $REPO_NAME --tag v${version} --description \"${releaseNotes}\""
-		context.bat "${context.env.Utils}\\github-release upload --user $REPO_ORG --repo $REPO_NAME --tag v${version} --name \"${artifact}\" --file \"${artifact}\""
+		context.bat "${context.env.Utils}\\github-release release --user $RELEASER --repo $REPO_ORG/$REPO_NAME --tag v${version} --description \"${releaseNotes}\""
+		context.bat "${context.env.Utils}\\github-release upload --user $RELEASER --repo $REPO_ORG/$REPO_NAME --tag v${version} --name \"${artifact}\" --file \"${artifact}\""
 		context.echo "uploaded to https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
 		return "https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
 	}
