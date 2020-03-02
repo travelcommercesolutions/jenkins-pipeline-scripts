@@ -2,6 +2,8 @@ package jobs.scripts;
 
 import groovy.json.JsonSlurperClassic
 
+def SETTINGS
+
 class Packaging {
 
     private static String DefaultBranchOrCommitPR = '${sha1}'
