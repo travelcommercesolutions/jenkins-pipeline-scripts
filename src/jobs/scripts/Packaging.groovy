@@ -348,8 +348,8 @@ class Packaging {
         releaseNotes = releaseNotes.denormalize().replace(platformLineSeparator, '<br>')
         releaseNotes = releaseNotes.replace("\"", "^\"")
 
-		context.bat "${context.env.Utils}\\github-release release --user $RELEASER --repo $REPO_ORG/$REPO_NAME --tag v${version} --description \"${releaseNotes}\""
-		context.bat "${context.env.Utils}\\github-release upload --user $RELEASER --repo $REPO_ORG/$REPO_NAME --tag v${version} --name \"${artifact}\" --file \"${artifact}\""
+		context.bat "${context.env.Utils}\\github-release release --user $RELEASER --repo $REPO_NAME --tag v${version} --description \"${releaseNotes}\""
+		context.bat "${context.env.Utils}\\github-release upload --user $RELEASER --repo $REPO_NAME --tag v${version} --name \"${artifact}\" --file \"${artifact}\""
 		context.echo "uploaded to https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
 		return "https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
 	}
