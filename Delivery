@@ -55,7 +55,7 @@ pipeline {
                     SETTINGS = new Settings(settingsFileContent)
                     def buildOrder = Utilities.getNextBuildOrder(this)
                     def regionAndEnvChoices = input message: "Select Environment", parameters: [
-                        choice(name: 'Environments', choices:"DEV\nQA\nSTAGE\nPROD\n")
+                        choice(name: 'Environments', choices:"DEV\nQA\nSTAGE01\nSTAGE02\nPROD\n")
                     ]
                     PROJECT_TYPE = 'SOLUTION'
                     UPDATE_CS = true
@@ -143,6 +143,34 @@ pipeline {
                                 }
                             }
                         break
+                        case 'STAGE01':
+                        SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}-EU01")
+
+                        def webAppName = SETTINGS['appName']
+                        def webAppPublicName = SETTINGS['webAppPublicName']
+                        def resourceGroupName = SETTINGS['resourceGroupName']
+                        def subscriptionID = SETTINGS['subscriptionID']
+                        def blobToken = SETTINGS['blobToken']
+                        withEnv(["AzureBlobToken=${blobToken}"]){
+                            Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                                // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            }
+                        break
+                        case 'STAGE02':
+                        SETTINGS.setEnvironment("TCS-ADMIN-${ENV_NAME}-EU02")
+
+                        def webAppName = SETTINGS['appName']
+                        def webAppPublicName = SETTINGS['webAppPublicName']
+                        def resourceGroupName = SETTINGS['resourceGroupName']
+                        def subscriptionID = SETTINGS['subscriptionID']
+                        def blobToken = SETTINGS['blobToken']
+                        withEnv(["AzureBlobToken=${blobToken}"]){
+                            Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                                // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            }
+                        break
                         }
                     }
                 }
@@ -186,6 +214,34 @@ pipeline {
                                     // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                                     "-StorefrontDir ${csRoot}\\storefront -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                                 }
+                            }
+                        break
+                        case 'STAGE01':
+                        SETTINGS.setEnvironment("TCS-PUBLIC-${ENV_NAME}-EU01")
+
+                        def webAppName = SETTINGS['appName']
+                        def webAppPublicName = SETTINGS['webAppPublicName']
+                        def resourceGroupName = SETTINGS['resourceGroupName']
+                        def subscriptionID = SETTINGS['subscriptionID']
+                        def blobToken = SETTINGS['blobToken']
+                        withEnv(["AzureBlobToken=${blobToken}"]){
+                            Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                                // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                "-StorefrontDir ${csRoot}\\storefront -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                            }
+                        break
+                        case 'STAGE02':
+                        SETTINGS.setEnvironment("TCS-PUBLIC-${ENV_NAME}-EU02")
+
+                        def webAppName = SETTINGS['appName']
+                        def webAppPublicName = SETTINGS['webAppPublicName']
+                        def resourceGroupName = SETTINGS['resourceGroupName']
+                        def subscriptionID = SETTINGS['subscriptionID']
+                        def blobToken = SETTINGS['blobToken']
+                        withEnv(["AzureBlobToken=${blobToken}"]){
+                            Utilities.runSharedPS(this, 'delivery/upload-CS.ps1', 
+                                // "-PlatformDir ${csRoot}\\platform -ModulesDir ${csRoot}\\modules -StorefrontDir ${csRoot}\\storefront -ThemeDir ${csRoot}\\theme -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
+                                "-StorefrontDir ${csRoot}\\storefront -WebAppName ${webAppName} -WebAppPublicName ${webAppPublicName} -ResourceGroupName ${resourceGroupName} -SubscriptionID ${subscriptionID}")
                             }
                         break
                         }
