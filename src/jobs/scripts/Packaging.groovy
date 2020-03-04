@@ -382,8 +382,8 @@ class Packaging {
 	{
 		context.dir(directory)
 		{
-			context.bat "\"${context.tool 'Git'}\" config user.email \"ci@virtocommerce.com\""
-			context.bat "\"${context.tool 'Git'}\" config user.name \"Virto Jenkins\""
+			context.bat "\"${context.tool 'Git'}\" config user.email \"ci@tc.solutions\""
+			context.bat "\"${context.tool 'Git'}\" config user.name \"TCS Jenkins\""
 			/*
 			if(!foundRecord)
 				{
