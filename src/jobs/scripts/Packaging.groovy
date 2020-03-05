@@ -385,7 +385,6 @@ class Packaging {
 			context.bat "\"${context.tool 'Git'}\" config user.email \"ci@tc.solutions\""
 			context.bat "\"${context.tool 'Git'}\" config user.name \"TCS Jenkins\""
             try {
-
 			/*
 			if(!foundRecord)
 				{
@@ -398,8 +397,7 @@ class Packaging {
 				*/
 			    context.bat "\"${context.tool 'Git'}\" commit -am \"${module} ${version}\""
 			    context.bat "\"${context.tool 'Git'}\" push origin HEAD:master -f"
-
-                } catch(Exception ex) {
+                } catch(Exception 1) {
                     println("Error. Nothing to commit, working tree clean");
                     }
 		}
