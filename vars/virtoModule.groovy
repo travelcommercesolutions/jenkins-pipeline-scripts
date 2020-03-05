@@ -287,7 +287,7 @@ def updateModule(def id, def version, def platformVersion, def title, def author
 	// MODULES
 	dir('modules') {
 		//checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'vc-ci', url: 'git@github.com:VirtoCommerce/vc-modules.git']]])
-		git credentialsId: 'tcs-ci', url: 'https://github.com/travelcommercesolutions/tcs-modules'
+		git credentialsId: 'romansoftteco-github', url: 'https://github.com/travelcommercesolutions/tcs-modules'
 
 
 		def inputFile = readFile file: 'modules.json', encoding: 'utf-8'
