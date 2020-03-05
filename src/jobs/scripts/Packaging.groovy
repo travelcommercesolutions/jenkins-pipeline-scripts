@@ -384,6 +384,8 @@ class Packaging {
 		{
 			context.bat "\"${context.tool 'Git'}\" config user.email \"ci@tc.solutions\""
 			context.bat "\"${context.tool 'Git'}\" config user.name \"TCS Jenkins\""
+            try {
+
 			/*
 			if(!foundRecord)
 				{
@@ -394,8 +396,12 @@ class Packaging {
 					bat "\"${tool 'Git'}\" commit -am \"Added new module ${id}\""
 				}
 				*/
-			context.bat "\"${context.tool 'Git'}\" commit -am \"${module} ${version}\""
-			context.bat "\"${context.tool 'Git'}\" push origin HEAD:master -f"
+			    context.bat "\"${context.tool 'Git'}\" commit -am \"${module} ${version}\""
+			    context.bat "\"${context.tool 'Git'}\" push origin HEAD:master -f"
+
+                } catch(Exception ex) {
+                    println("Error. Nothing to commit, working tree clean");
+                    }
 		}
 	}    
 
