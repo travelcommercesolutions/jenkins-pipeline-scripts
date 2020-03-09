@@ -65,12 +65,12 @@ import jobs.scripts.*
 				}
 			}
 
-			stage('Code Analysis') {
-				timestamps { 
-					Packaging.endAnalyzer(this)
-					Packaging.checkAnalyzerGate(this)
-				}
-			}			
+			// stage('Code Analysis') {
+			// 	timestamps { 
+			// 		Packaging.endAnalyzer(this)
+			// 		Packaging.checkAnalyzerGate(this)
+			// 	}
+			// }			
 
 			// if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'release') {
 			// 	stage('Create Test Environment') {
