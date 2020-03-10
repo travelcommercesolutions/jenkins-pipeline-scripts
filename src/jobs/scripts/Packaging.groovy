@@ -397,10 +397,9 @@ class Packaging {
 				*/
 			    context.bat "\"${context.tool 'Git'}\" commit -am \"${module} ${version}\""
 			    context.bat "\"${context.tool 'Git'}\" push origin HEAD:master -f"
-                } catch ('nothing to commit, working tree clean' ex) {
+                } catch ('Nothing to commit, working tree clean' ex) {
                     println "Error. Nothing to commit, working tree clean"
                     }
-            println("Let's move on after the exception")
 		}
 	}    
 
