@@ -74,8 +74,7 @@ def call(body) {
 				{
 					timestamps
 					{
-						Modules.runUnitTests(this)
-						// Packaging.runUnitTests(this, tests)
+						Packaging.runUnitTests(this, tests)
 					}
 				}
 			}
