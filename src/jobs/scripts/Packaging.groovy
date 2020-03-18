@@ -304,18 +304,20 @@ class Packaging {
 
     def static runUnitTests(context, tests)
     {
-        context.echo "Running MSBuild Code Analysis Tests"
-        def wsFolder = context.pwd()
-        def solutions = context.findFiles(glob: '*.sln')
+        def paths = Modules.prepareTestEnvironment(context)
+        Utilities.runUnitTest(context, traits, paths, resultsFileName)
+        // context.echo "Running MSBuild Code Analysis Tests"
+        // def wsFolder = context.pwd()
+        // def solutions = context.findFiles(glob: '*.sln')
 
-        if (solutions.size() > 0)
-        {
-            for (int i = 0; i < solutions.size(); i++)
-            {
-                def solution = solutions[i]
-                context.bat "\"${context.tool DefaultMSBuild}\" \"${solution.name}\" /p:RunCodeAnalysis=true \"/p:CodeAnalysisLogFile=$wsFolder\\CodeAnalysis.xml\""
-            }
-        }
+        // if (solutions.size() > 0)
+        // {
+        //     for (int i = 0; i < solutions.size(); i++)
+        //     {
+        //         def solution = solutions[i]
+        //         context.bat "\"${context.tool DefaultMSBuild}\" \"${solution.name}\" /p:RunCodeAnalysis=true \"/p:CodeAnalysisLogFile=$wsFolder\\CodeAnalysis.xml\""
+        //     }
+        // }
     }
 
 	def static publishRelease(context, version, releaseNotes)
