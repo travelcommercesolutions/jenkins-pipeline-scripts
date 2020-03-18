@@ -133,7 +133,7 @@ def call(body) {
 		{
 			//Packaging.stopDockerTestEnvironment(this, dockerTag)
 			//Utilities.generateAllureReport(this)
-			bat "docker image prune --force"
+			// bat "docker image prune --force"
 			if(currentBuild.result != 'FAILURE')
 			{
 				// step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
