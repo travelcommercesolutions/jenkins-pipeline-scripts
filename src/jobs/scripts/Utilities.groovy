@@ -405,7 +405,7 @@ class Utilities {
         def pdbDirs = []
         def currentDir = new File(context.pwd())
         currentDir.eachDirRecurse(){ dir->
-            if(dir.getPath() =~ /.*\\bin/)
+            if(dir.getPath() =~ /.*\\Debug/)
                 pdbDirs << dir.path
         }
         return pdbDirs
