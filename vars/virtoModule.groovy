@@ -169,7 +169,7 @@ import jobs.scripts.*
 			throw any //rethrow exception to prevent the build from proceeding
 		}
 		finally {
-			Packaging.stopDockerTestEnvironment(this, dockerTag)
+			// Packaging.stopDockerTestEnvironment(this, dockerTag)
 			// Utilities.generateAllureReport(this)
 			// Utilities.notifyBuildStatus(this, SETTINGS['of365hook'], "Build finished", currentBuild.currentResult)
 			// step([$class: 'LogParserPublisher',
