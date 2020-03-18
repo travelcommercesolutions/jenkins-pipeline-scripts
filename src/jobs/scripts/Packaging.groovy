@@ -302,9 +302,14 @@ class Packaging {
         context.bat "node node_modules\\gulp\\bin\\gulp.js compress"
     }
 
-    def static runUnitTests(context, tests)
+    def static runUnitTests(context)
     {
-        def paths = Modules.prepareTestEnvironment(context)
+        Packaging.runTests(context, "Category=Unit|Category=CI", "xUnit.UnitTests.xml")
+    }
+
+    def static runTests(context, traits, resultsFileName)
+    {
+        def paths = Utilities.prepareTestEnvironment(context)
         Utilities.runUnitTest(context, traits, paths, resultsFileName)
         // context.echo "Running MSBuild Code Analysis Tests"
         // def wsFolder = context.pwd()

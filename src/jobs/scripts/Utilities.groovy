@@ -255,6 +255,41 @@ class Utilities {
         }
     }    
 
+    def static prepareTestEnvironment(context)
+    {
+        def testDlls = context.findFiles(glob: '**\\bin\\Debug\\*Test*.dll')
+        String paths = ""
+        if (testDlls.size() > 0) {
+            for (int i = 0; i < testDlls.size(); i++)
+            {
+                def testDll = testDlls[i]
+                paths += "\"$testDll.path\" "
+            }
+        }
+
+            // add platform dll to test installs
+        def packagesDir = Utilities.getArtifactFolder(context)
+        // def allModulesDir = "c:\\Builds\\Jenkins\\VCF\\modules"
+
+        context.env.xunit_virto_modules_folder = packagesDir
+        // context.env.xunit_virto_dependency_modules_folder = allModulesDir
+
+        def testFolderName = "dev"
+
+        // copy artifacts to global location that can be used by other modules, but don't do that for master branch as we need to test it with real manifest
+        // if (context.env.BRANCH_NAME != 'master') {
+        //     context.dir(packagesDir)
+        //     {		
+        //         // copy all files to modules
+        //         context.bat "xcopy *.zip \"${allModulesDir}\" /y" 
+        //     }	
+        // }
+
+        //paths += "\"..\\..\\..\\vc-platform\\${testFolderName}\\workspace\\virtocommerce.platform.tests\\bin\\debug\\VirtoCommerce.Platform.Test.dll\""
+
+        return paths;
+    }
+
     def static runUnitTest(context, traits, paths, resultsFileName)
     {
         def coverageExecutable = "${context.env.CodeCoverage}\\CodeCoverage.exe"
