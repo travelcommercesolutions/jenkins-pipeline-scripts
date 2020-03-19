@@ -302,13 +302,14 @@ class Packaging {
         context.bat "node node_modules\\gulp\\bin\\gulp.js compress"
     }
 
-    def static runUnitTests(context)
-    {
-        Packaging.runTests(context, "Category=Unit|Category=CI", "xUnit.UnitTests.xml")
-    }
+    // New unit tests
+    // def static runUnitTests(context)
+    // {
+    //     Packaging.runTests(context, "Category=Unit|Category=CI", "xUnit.UnitTests.xml")
+    // }
 
     // def static runTests(context, traits, resultsFileName)
-    def static runTests(context, tests)
+    def static runUnitTests(context, tests)
     {
     //     def paths = Utilities.prepareTestEnvironment(context)
     //     Utilities.runUnitTest(context, traits, paths, resultsFileName)
