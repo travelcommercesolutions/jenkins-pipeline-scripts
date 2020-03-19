@@ -312,7 +312,7 @@ class Utilities {
             throw new Exception("can't create coverage folder: " + coverageFolder); 
         }
 
-        String pdbDirs = paths.getParent();
+        String pdbDirs = paths.substring(0, paths.lastIndexOf("/")+1);
         if(isNetCore(context.projectType)){
             context.bat "\"${context.env.OPENCOVER}\\opencover.console.exe\" -returntargetcode -oldStyle -searchdirs:\"${pdbDirs}\" -register:user -filter:\"+[Virto*]* -[xunit*]*\" -target:\"${context.env.DOTNET_PATH}\\dotnet.exe\" -targetargs:\"vstest ${paths} /TestCaseFilter:(${traits}) /Enablecodecoverage --logger:trx;LogFileName=${coverageFolder}\\${resultsFileName}\""
         }
