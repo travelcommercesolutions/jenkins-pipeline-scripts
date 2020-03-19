@@ -257,7 +257,7 @@ class Utilities {
 
     def static prepareTestEnvironment(context)
     {
-        def testDlls = context.findFiles(glob: '**\\bin\\Debug\\*Test*.dll')
+        def testDlls = context.findFiles(glob: '**\\bin\\Debug\\*.Test*.dll')
         String paths = ""
         if (testDlls.size() > 0) {
             for (int i = 0; i < testDlls.size(); i++)
@@ -312,12 +312,12 @@ class Utilities {
             throw new Exception("can't create coverage folder: " + coverageFolder); 
         }
 
-        def pdbDirs = getPDBDirsStr(context)
+        String pdbDirs = paths.getParent();
         if(isNetCore(context.projectType)){
-            context.bat "\"${context.env.OPENCOVER}\\opencover.console.exe\" -returntargetcode -oldStyle -searchdirs:\"${pdbDirs}\" -register:user -filter:\"+[Virto*]* -[xunit*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${context.env.DOTNET_PATH}\\dotnet.exe\" -targetargs:\"vstest ${paths} /TestCaseFilter:(${traits})\""
+            context.bat "\"${context.env.OPENCOVER}\\opencover.console.exe\" -returntargetcode -oldStyle -searchdirs:\"${pdbDirs}\" -register:user -filter:\"+[Virto*]* -[xunit*]*\" -target:\"${context.env.DOTNET_PATH}\\dotnet.exe\" -targetargs:\"vstest ${paths} /TestCaseFilter:(${traits}) /Enablecodecoverage --logger:trx;LogFileName=${coverageFolder}\\${resultsFileName}\""
         }
         else{
-            context.bat "\"${context.env.OPENCOVER}\\opencover.console.exe\" -returntargetcode -oldStyle -searchdirs:\"${pdbDirs}\" -register:user -filter:\"+[*]* -[Moq]* -[xunit*]* -[Common.*]*\" -output:\"${coverageFolder}\\VisualStudio.Unit.coveragexml\" -target:\"${context.env.DOTNET_PATH}\\dotnet.exe\" -targetargs:\"vstest ${paths} /TestCaseFilter:(${traits}) --logger:trx\""
+            context.bat "\"${context.env.OPENCOVER}\\opencover.console.exe\" -returntargetcode -oldStyle -searchdirs:\"${pdbDirs}\" -register:user -filter:\"+[*]* -[Moq]* -[xunit*]* -[Common.*]*\" -target:\"${context.env.DOTNET_PATH}\\dotnet.exe\" -targetargs:\"vstest ${paths} /TestCaseFilter:(${traits}) /Enablecodecoverage --logger:trx;LogFileName=${coverageFolder}\\${resultsFileName}\""
         }
         context.step([$class: 'XUnitPublisher', testTimeMargin: '3000', thresholdMode: 1, thresholds: [[$class: 'FailedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: ''], [$class: 'SkippedThreshold', failureNewThreshold: '', failureThreshold: '', unstableNewThreshold: '', unstableThreshold: '']], tools: [[$class: 'XUnitDotNetTestType', deleteOutputFiles: true, failIfNotNew: false, pattern: resultsFileName, skipNoTestFiles: true, stopProcessingIfError: false]]])
     }
