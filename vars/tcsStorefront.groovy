@@ -109,7 +109,8 @@ def call(body) {
 							Packaging.saveArtifact(this, 'tcs', 'storefront', '', artifacts[0].path) // config.sampleStore for projects w def store
 						}
 						if (env.BRANCH_NAME == 'master') {
-							Packaging.publishRelease(this, "v" + version, notes) // publish artifacts to github releases
+							def ReleaseTag = 'v' << version
+							Packaging.publishRelease(this, ReleaseTag, notes) // publish artifacts to github releases
 						}
 						if (env.BRANCH_NAME == 'dev') {
 							def ReleaseTime = new Date()
