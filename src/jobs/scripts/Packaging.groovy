@@ -305,7 +305,7 @@ class Packaging {
     // New unit tests
     def static runUnitTests(context)
     {
-        Packaging.runTests(context, "Category=Unit|Category=CI", "VisualStudio.Unit.coveragexml")
+        Packaging.runTests(context, "*", "VisualStudio.Unit.coveragexml")
     }
 
     def static runTests(context, traits, resultsFileName)
