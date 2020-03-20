@@ -257,13 +257,13 @@ class Utilities {
 
     def static prepareTestEnvironment(context)
     {
-        def testDlls = context.findFiles(glob: '**\\bin\\Debug\\*.Test*.dll')
+        def testDlls = context.findFiles(glob: '**\\bin\\Debug\\*.Test.dll')
         String paths = ""
         if (testDlls.size() > 0) {
             for (int i = 0; i < testDlls.size(); i++)
             {
                 def testDll = testDlls[i]
-                paths += "\"$testDll.path\" "
+                paths += "$testDll.path "
             }
         }
 
