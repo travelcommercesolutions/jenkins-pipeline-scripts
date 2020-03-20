@@ -110,7 +110,7 @@ def call(body) {
 						}
 						if (env.BRANCH_NAME == 'master') {
 							String releasetag = "v" << version
-							Packaging.publishRelease(this, releasetag, notes, " ") // publish artifacts to github releases
+							Packaging.publishRelease(this, releasetag, notes, "") // publish artifacts to github releases
 						}
 						if (env.BRANCH_NAME == 'dev') {
 							def releasetime = new Date()
