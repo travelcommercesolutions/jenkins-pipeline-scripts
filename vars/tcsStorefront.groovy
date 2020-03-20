@@ -112,7 +112,7 @@ def call(body) {
 							Packaging.publishRelease(this, version, notes) // publish artifacts to github releases
 						}
 						if (env.BRANCH_NAME == 'dev') {
-							Packaging.publishRelease(this, java.time.LocalDateTime.now(), notes) // publish artifacts to github releases
+							Packaging.publishRelease(this, java.time.LocalDateTime.now(), prerelease, "--pre-release") // publish artifacts to github releases
 						}
 					}
 					// Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
