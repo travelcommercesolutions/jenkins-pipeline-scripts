@@ -116,7 +116,7 @@ def call(body) {
 							def ReleaseTime = new Date()
 							Packaging.publishRelease(this, ReleaseTime.format("dd-MM-yyyy-HH.mm"), "prerelease", "--pre-release") // publish artifacts to github releases
 						}
-					
+					}
 					// Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
 				}
 			}
