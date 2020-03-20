@@ -109,12 +109,13 @@ def call(body) {
 							Packaging.saveArtifact(this, 'tcs', 'storefront', '', artifacts[0].path) // config.sampleStore for projects w def store
 						}
 						if (env.BRANCH_NAME == 'master') {
-							def ReleaseTag = 'v' << version
-							Packaging.publishRelease(this, ReleaseTag, notes) // publish artifacts to github releases
+							Strinng releaseTag = "v" 
+							releaseTag << version
+							Packaging.publishRelease(this, releaseTag, notes) // publish artifacts to github releases
 						}
 						if (env.BRANCH_NAME == 'dev') {
-							def ReleaseTime = new Date()
-							Packaging.publishRelease(this, ReleaseTime.format("dd-MM-yyyy-HH.mm"), "prerelease", "--pre-release") // publish artifacts to github releases
+							def releaseTime = new Date()
+							Packaging.publishRelease(this, releaseTime.format("dd-MM-yyyy-HH.mm"), "prerelease", "--pre-release") // publish artifacts to github releases
 						}
 					}
 					// Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
