@@ -108,8 +108,11 @@ def call(body) {
 						{
 							Packaging.saveArtifact(this, 'tcs', 'storefront', '', artifacts[0].path) // config.sampleStore for projects w def store
 						}
-							if (env.BRANCH_NAME == 'master') {
+						if (env.BRANCH_NAME == 'master') {
 							Packaging.publishRelease(this, version, notes) // publish artifacts to github releases
+						}
+						if (env.BRANCH_NAME == 'dev') {
+							Packaging.publishRelease(this, java.time.LocalDateTime.now(), notes) // publish artifacts to github releases
 						}
 					}
 					// Utilities.runSharedPS(this, "${deployScript}", "-Prefix ${prefix}")
