@@ -109,7 +109,7 @@ def call(body) {
 							Packaging.saveArtifact(this, 'tcs', 'storefront', '', artifacts[0].path) // config.sampleStore for projects w def store
 						}
 						if (env.BRANCH_NAME == 'master') {
-							Strinng releaseTag = "v" 
+							String releaseTag = "v" 
 							releaseTag << version
 							Packaging.publishRelease(this, releaseTag, notes) // publish artifacts to github releases
 						}
