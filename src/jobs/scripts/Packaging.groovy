@@ -327,7 +327,7 @@ class Packaging {
         // }
     }
 
-	def static publishRelease(context, version, releaseNotes, additionalParameters)
+	def static publishRelease(context, releaseTag, releaseNotes, additionalParameters)
 	{
 		def tempFolder = Utilities.getTempFolder(context)
 		def packagesDir = Utilities.getArtifactFolder(context)
@@ -339,7 +339,7 @@ class Packaging {
 			if (artifacts.size() > 0) {
 				for (int i = 0; i < artifacts.size(); i++)
 				{
-					packageUrl = Packaging.publishGithubRelease(context, version, releaseNotes, additionalParameters, artifacts[i])
+					packageUrl = Packaging.publishGithubRelease(context, releaseTag, releaseNotes, additionalParameters, artifacts[i])
 				}
 			}
 		}
@@ -347,7 +347,7 @@ class Packaging {
 		return packageUrl
 	} 
 
-	def static publishGithubRelease(context, version, releaseNotes, additionalParameters, artifact)   
+	def static publishGithubRelease(context, releaseTag, releaseNotes, additionalParameters, artifact)   
 	{
 		def REPO_NAME = Utilities.getRepoName(context)
 		def REPO_ORG = Utilities.getOrgName(context)
@@ -356,10 +356,10 @@ class Packaging {
         releaseNotes = releaseNotes.denormalize().replace(platformLineSeparator, '<br>')
         releaseNotes = releaseNotes.replace("\"", "^\"")
 
-		context.bat "${context.env.Utils}\\github-release release ${additionalParameters} --user $REPO_ORG --repo $REPO_NAME --tag ${version} --description \"${releaseNotes}\""
-		context.bat "${context.env.Utils}\\github-release upload --user $REPO_ORG --repo $REPO_NAME --tag ${version} --name \"${artifact}\" --file \"${artifact}\""
-		context.echo "uploaded to https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
-		return "https://github.com/$REPO_ORG/$REPO_NAME/releases/download/v${version}/${artifact}"
+		context.bat "${context.env.Utils}\\github-release release ${additionalParameters} --user $REPO_ORG --repo $REPO_NAME --tag ${releaseTag} --description \"${releaseNotes}\""
+		context.bat "${context.env.Utils}\\github-release upload --user $REPO_ORG --repo $REPO_NAME --tag ${releaseTag} --name \"${artifact}\" --file \"${artifact}\""
+		context.echo "uploaded to https://github.com/$REPO_ORG/$REPO_NAME/releases/download/${releaseTag}/${artifact}"
+		return "https://github.com/$REPO_ORG/$REPO_NAME/releases/download/${releaseTag}/${artifact}"
 	}
 
 	def static getShouldPublish(context)
