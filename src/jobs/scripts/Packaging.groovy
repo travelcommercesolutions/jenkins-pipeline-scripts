@@ -332,14 +332,16 @@ class Packaging {
 		def tempFolder = Utilities.getTempFolder(context)
 		def packagesDir = Utilities.getArtifactFolder(context)
 		def packageUrl
+        def releaseTag
+        def additionalParameters
 
 		if (branch == 'master') {
-			String releaseTag = "v" << version
-            String additionalParameters = ""
+			releaseTag = "v" << version
+            additionalParameters = ""
 		} else {
             def releasetime = new Date()
-            String releaseTag = releasetime.format("dd-MM-yyyy-HH.mm")
-            String additionalParameters = "--pre-release"
+            releaseTag = releasetime.format("dd-MM-yyyy-HH.mm")
+            additionalParameters = "--pre-release"
         }
 
 		context.dir(packagesDir)
