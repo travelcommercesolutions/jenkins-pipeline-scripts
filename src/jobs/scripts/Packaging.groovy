@@ -327,11 +327,20 @@ class Packaging {
         // }
     }
 
-	def static publishRelease(context, releaseTag, releaseNotes, additionalParameters)
+	def static publishRelease(context, version, releaseNotes, branch)
 	{
 		def tempFolder = Utilities.getTempFolder(context)
 		def packagesDir = Utilities.getArtifactFolder(context)
 		def packageUrl
+
+		if (env.BRANCH_NAME == 'master') {
+			String releaseTag = "v" << version
+            def additionalParameters = ""
+		} else {
+            def releasetime = new Date()
+            def releaseTag = releasetime.format("dd-MM-yyyy-HH.mm")
+            def additionalParameters = "--pre-release"
+        }
 
 		context.dir(packagesDir)
 		{
