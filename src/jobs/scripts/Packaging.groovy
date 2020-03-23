@@ -333,7 +333,7 @@ class Packaging {
 		def packagesDir = Utilities.getArtifactFolder(context)
 		def packageUrl
 
-		if (env.BRANCH_NAME == 'master') {
+		if (branch == 'master') {
 			String releaseTag = "v" << version
             def additionalParameters = ""
 		} else {
