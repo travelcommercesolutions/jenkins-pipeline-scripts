@@ -335,11 +335,11 @@ class Packaging {
 
 		if (branch == 'master') {
 			String releaseTag = "v" << version
-            def additionalParameters = ""
+            String additionalParameters = ""
 		} else {
             def releasetime = new Date()
-            def releaseTag = releasetime.format("dd-MM-yyyy-HH.mm")
-            def additionalParameters = "--pre-release"
+            String releaseTag = releasetime.format("dd-MM-yyyy-HH.mm")
+            String additionalParameters = "--pre-release"
         }
 
 		context.dir(packagesDir)
