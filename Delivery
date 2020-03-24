@@ -53,7 +53,7 @@ pipeline {
                     SETTINGS = new Settings(settingsFileContent)
                     def buildOrder = Utilities.getNextBuildOrder(this)
                     def regionAndEnvChoices = input message: "Select Environment", parameters: [
-                        booleanParam(name: 'logicApps', defaultValue: false)
+                        booleanParam(name: 'logicApps', defaultValue: false),
                         choice(name: 'Environments', choices:"DEV\nQA\nSTAGE01\nSTAGE02\nPROD\n")
                     ]
                     LOGIC_APPS = choices['logicApps']
