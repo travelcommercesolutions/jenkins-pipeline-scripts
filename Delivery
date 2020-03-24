@@ -1,4 +1,3 @@
-
 import groovy.util.*
 import jobs.scripts.*
 import groovy.json.JsonSlurperClassic
@@ -36,7 +35,6 @@ def DOCKER_TAG
 
 def PROJECT_TYPES
 
-
 pipeline {
     agent any
 
@@ -55,22 +53,22 @@ pipeline {
                     SETTINGS = new Settings(settingsFileContent)
                     def buildOrder = Utilities.getNextBuildOrder(this)
                     def regionAndEnvChoices = input message: "Select Environment", parameters: [
+                        booleanParam(name: 'logicApps', defaultValue: false)
                         choice(name: 'Environments', choices:"DEV\nQA\nSTAGE01\nSTAGE02\nPROD\n")
                     ]
+                    LOGIC_APPS = choices['logicApps']
                     PROJECT_TYPE = 'SOLUTION'
                     UPDATE_CS = true
                     ENV_NAME = regionAndEnvChoices.trim()//['Environments']
                     SETTINGS.setRegion(PROJECT_TYPE)
                     SETTINGS.setEnvironment(ENV_NAME)
-                    echo "Vars: PROJECT_TYPE - ${PROJECT_TYPE}, UPDATE_CS - ${UPDATE_CS}, ENV_NAME - ${ENV_NAME}"
+                    echo "Vars: PROJECT_TYPE - ${PROJECT_TYPE}, UPDATE_CS - ${UPDATE_CS}, ENV_NAME - ${ENV_NAME}, LOGIC_APPS - ${LOGIC_APPS}"
                     def msgToHook = "Delivery Option ${PROJECT_TYPE}<br/>Environment ${ENV_NAME}<br/>${UPDATE_CS ? "Update Solution<br/>":""}"
                     //Utilities.notifyBuildStatus(this, SETTINGS['prefix'], SETTINGS['of365hook'], msgToHook, 'STARTED')
                 }
                 buildDescription "Delivered to ${ENV_NAME}"
             }
         }
-
-        
 
         stage("Preparing Solution"){
             when{
