@@ -256,7 +256,8 @@ def processManifest(def publish, def manifestPath)
 	Modules.createModuleArtifact(this, manifestDirectory)
 
 	if (publish) {
-		packageUrl = Packaging.publishRelease(this, version, releaseNotes, env.BRANCH_NAME)
+		String releasetag = "v" << version
+		packageUrl = Packaging.publishRelease(this, releasetag, releaseNotes, "")
 
 		if(env.BRANCH_NAME != '1.1.3'){
 			updateModule(
