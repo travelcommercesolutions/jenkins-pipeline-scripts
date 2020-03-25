@@ -59,7 +59,7 @@ pipeline {
                     LOGIC_APPS = regionAndEnvChoices['logicApps']
                     PROJECT_TYPE = 'SOLUTION'
                     UPDATE_CS = true
-                    ENV_NAME = regionAndEnvChoices.trim()//['Environments']
+                    ENV_NAME = regionAndEnvChoices
                     SETTINGS.setRegion(PROJECT_TYPE)
                     SETTINGS.setEnvironment(ENV_NAME)
                     echo "Vars: PROJECT_TYPE - ${PROJECT_TYPE}, UPDATE_CS - ${UPDATE_CS}, ENV_NAME - ${ENV_NAME}" //, LOGIC_APPS - ${LOGIC_APPS}
