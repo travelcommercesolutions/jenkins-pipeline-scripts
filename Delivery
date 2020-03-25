@@ -35,6 +35,8 @@ def DOCKER_TAG
 
 def PROJECT_TYPES
 
+def prefix = 'tcs'
+
 pipeline {
     agent any
 
@@ -384,7 +386,7 @@ pipeline {
                     def logicAppsRoot = "${logicAppsDir}\\${SETTINGS['prefix']}-AzureResourceGroup"
                     dir(logicAppsDir){
                         deleteDir()
-                        git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url:    "https://github.com/travelcommercesolutions/${SETTINGS['prefix']}-logic-apps.git"
+                        git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: "https://github.com/travelcommercesolutions/${SETTINGS['prefix']}-logic-apps.git"
 
                         def apps = Utilities.getSubfolders(logicAppsRoot)
                         def logicApp = input message:"Select Logic App", parameters:[choice(name: 'logicApp', choices: apps.join("\n"))]
