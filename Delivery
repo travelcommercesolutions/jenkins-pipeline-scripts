@@ -382,7 +382,7 @@ pipeline {
                 script{
                     def prefix = "tcs"
                     def logicAppsDir = "${env.WORKSPACE}\\LogicApps"
-                    def logicAppsRoot = "${logicAppsDir}\\Test-LA" // usually azure group here
+                    def logicAppsRoot = logicAppsDir // usually azure group here
                     dir(logicAppsDir){
                         deleteDir()
                         git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: "https://github.com/travelcommercesolutions/${prefix}-logic-apps.git"
@@ -407,6 +407,8 @@ pipeline {
                     def templateFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.json"
                     def envname = ENV_NAME.toLowerCase()
                     def templateParametersFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.parameters.${envname}.json"
+                    // prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile) // in case external settings needed
+                    // runPS("Deploy-LogicApps.ps1", "-SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}")
                     powershell "${env.WORKSPACE}\\resources\\azure\\delivery\\Deploy-LogicApps.ps1 -SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}"
                 }
             }
@@ -449,6 +451,28 @@ pipeline {
         }
     }
 }
+def prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile){
+    configFileProvider([configFile(fileId: 'logicapp-params', variable: 'PARAMS_FILE')]) {
+        def paramsFileContent = readFile(PARAMS_FILE)
+        def paramsJson = parseJsonFile(paramsFileContent)
+        def logicAppParamNames = paramsJson[REGION][LOGICAPP_NAME][ENV_NAME].keySet() as String[]
+        echo "read param file ${templateParametersFile}"
+        def dstParamFileContent = readFile(templateParametersFile)
+        if(dstParamFileContent == null){
+            echo "dstParamFileContent is null"
+        }
+        else 
+            echo "read success"
+        def dstParamJson = parseJsonFile(dstParamFileContent)
+        for(logicAppParameter in logicAppParamNames){
+            dstParamJson['parameters'][logicAppParameter]['value'] = paramsJson[REGION][LOGICAPP_NAME][ENV_NAME][logicAppParameter]
+        }
+        def json = groovy.json.JsonOutput.toJson(dstParamJson)
+        json = groovy.json.JsonOutput.prettyPrint(json)
+        writeFile(file:templateParametersFile, text: json)
+    }
+}
+
 def runPS(psName, args){
     def psPath = libraryResource "delivery/${psName}"
     echo "dbg: ${psPath} ${args}"
