@@ -53,10 +53,10 @@ pipeline {
                     SETTINGS = new Settings(settingsFileContent)
                     def buildOrder = Utilities.getNextBuildOrder(this)
                     def regionAndEnvChoices = input message: "Select Environment", parameters: [
-                        // booleanParam(name: 'logicApps', defaultValue: false),
+                        booleanParam(name: 'logicApps', defaultValue: false),
                         choice(name: 'Environments', choices:"DEV\nQA\nSTAGE01\nSTAGE02\nPROD\n")
                     ]
-                    // LOGIC_APPS = choices['logicApps']
+                    LOGIC_APPS = choices['logicApps']
                     PROJECT_TYPE = 'SOLUTION'
                     UPDATE_CS = true
                     ENV_NAME = regionAndEnvChoices.trim()//['Environments']
@@ -384,24 +384,13 @@ pipeline {
                     def logicAppsRoot = "${logicAppsDir}\\${SETTINGS['prefix']}-AzureResourceGroup"
                     dir(logicAppsDir){
                         deleteDir()
-                        git branch: 'dev', credentialsId: '58ec1dd6-95a5-42f1-afd9-cace1f5fa2dd', url: "https://github.com/heineken-order-transfer/${SETTINGS['prefix']}-logic-apps.git" 
-                    
+                        git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url:    "https://github.com/travelcommercesolutions/${SETTINGS['prefix']}-logic-apps.git"
+
                         def apps = Utilities.getSubfolders(logicAppsRoot)
                         def logicApp = input message:"Select Logic App", parameters:[choice(name: 'logicApp', choices: apps.join("\n"))]
                         def appDir = "${logicAppsRoot}\\${logicApp}"
-                        if(ENV_NAME == 'ACC'){
-                            def deliveryInfo = getDeliveryInfo()
-                            def logicAppVersion = "${deliveryInfo['LOGICAPPS'][PROJECT_TYPE][logicApp]['version']}.${deliveryInfo['LOGICAPPS'][PROJECT_TYPE][logicApp]['number']}" 
-                            LOGICAPP_FILE = "${env.WORKSPACE}@tmp\\VirtoWay.B2BOrderTransfer.${PROJECT_TYPE}.LA-${logicApp}.deployer.${logicAppVersion}.zip"
-                            deliveryInfo['LOGICAPPS'][PROJECT_TYPE][logicApp]['number']++
-                            updateDeliveryInfo(deliveryInfo)
-                            powershell "Rename-Item -Path ${appDir}\\LogicApp-${logicApp}.json -NewName DeploymentTemplate.json -Force"
-                            powershell "Compress-Archive -Path ${appDir}\\DeploymentTemplate.json, ${appDir}\\DeploymentTemplate.param.*.json -DestinationPath ${LOGICAPP_FILE}"
-                        }
-                        else{
-                            LOGICAPP_NAME = logicApp
-                            LOGICAPP_FILE = appDir
-                        }
+                        LOGICAPP_NAME = logicApp
+                        LOGICAPP_FILE = appDir
                     }
                 }
             }
@@ -414,19 +403,10 @@ pipeline {
             }
             steps{
                 script{
-                    if(ENV_NAME == 'ACC'){
-                        def res = powershell script: "${env.Utils}\\octopus\\octo.exe push --package ${LOGICAPP_FILE} --server ${env.OCTOPUS_USR} --apiKey ${env.OCTOPUS_PSW}", returnStatus: true
-                        if(res != 0){
-                            UNSTABLE = true
-                            CAUSES.add("Delivering Logic App: octopus failed")
-                        }
-                    }
-                    else{
-                        def templateFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.json"
-                        def envname = ENV_NAME.toLowerCase()
-                        def templateParametersFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.parameters.${envname}.json"
-                        powershell "${env.WORKSPACE}\\ps\\Deploy-LogicApps.ps1 -SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}"
-                    }
+                    def templateFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.json"
+                    def envname = ENV_NAME.toLowerCase()
+                    def templateParametersFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.parameters.${envname}.json"
+                    powershell "${env.WORKSPACE}\\resources\\azure\\delivery\\Deploy-LogicApps.ps1 -SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}"
                 }
             }
         }
