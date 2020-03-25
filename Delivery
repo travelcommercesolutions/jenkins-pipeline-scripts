@@ -56,7 +56,7 @@ pipeline {
                         booleanParam(name: 'logicApps', defaultValue: false),
                         choice(name: 'Environments', choices:"DEV\nQA\nSTAGE01\nSTAGE02\nPROD\n")
                     ]
-                    LOGIC_APPS = choices['logicApps']
+                    LOGIC_APPS = regionAndEnvChoices['logicApps']
                     PROJECT_TYPE = 'SOLUTION'
                     UPDATE_CS = true
                     ENV_NAME = regionAndEnvChoices.trim()//['Environments']
