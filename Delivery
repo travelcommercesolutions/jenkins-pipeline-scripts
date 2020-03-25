@@ -477,6 +477,7 @@ def updateDeliveryInfo(data){
     writeFile(file:"C:\\CICD\\delivery.json", text: json)
 }
 
+@NonCPS
 def getSubfolders(path){
     def  dirsl = [] 
     new File(path).eachDir()
