@@ -382,8 +382,7 @@ pipeline {
                 script{
                     def prefix = "tcs"
                     def logicAppsDir = "${env.WORKSPACE}\\LogicApps"
-                    def logicAppsRoot = "${logicAppsDir}\\Test-LA"
-                    echo logicAppsRoot.getClass() // check
+                    def logicAppsRoot = "${logicAppsDir}\\Test-LA" // usually azure group here
                     dir(logicAppsDir){
                         deleteDir()
                         git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: "https://github.com/travelcommercesolutions/${prefix}-logic-apps.git"
