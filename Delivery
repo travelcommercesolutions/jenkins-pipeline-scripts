@@ -387,7 +387,7 @@ pipeline {
                         deleteDir()
                         git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: "https://github.com/travelcommercesolutions/${prefix}-logic-apps.git"
 
-                        def apps = Utilities.getSubfolders(logicAppsRoot)
+                        def apps = getSubfolders(logicAppsRoot)
                         def logicApp = input message:"Select Logic App", parameters:[choice(name: 'logicApp', choices: apps.join("\n"))]
                         def appDir = "${logicAppsRoot}\\${logicApp}"
                         LOGICAPP_NAME = logicApp
@@ -475,4 +475,16 @@ def updateDeliveryInfo(data){
     def json = groovy.json.JsonOutput.toJson(data)
     json = groovy.json.JsonOutput.prettyPrint(json)
     writeFile(file:"C:\\CICD\\delivery.json", text: json)
+}
+
+def getSubfolders(path){
+    def  dirsl = [] 
+    new File(path).eachDir()
+    {
+        dirs ->
+        if (!dirs.getName().startsWith('.')) {
+            dirsl.add(dirs.getName())
+        }
+    }
+    return dirsl
 }
