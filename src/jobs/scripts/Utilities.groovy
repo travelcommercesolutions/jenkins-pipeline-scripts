@@ -542,7 +542,19 @@ class Utilities {
         return number
     }
 
-    
+    @NonCPS
+    def static getSubfolders(path){
+        def  dirsl = [] 
+        new File(path).eachDir()
+        {
+            dirs ->
+            if (!dirs.getName().startsWith('.')) {
+                dirsl.add(dirs.getName())
+            }
+        }
+        return dirsl
+    }
+
     @NonCPS
     def getUserCause(){
         for (cause in currentBuild.rawBuild.getCauses()) {
