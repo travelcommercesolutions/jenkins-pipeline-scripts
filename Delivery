@@ -17,7 +17,6 @@ def UNSTABLE = false
 def CAUSES = []
 
 def PLATFORM_VERSION
-def REGION = 'tcs'
 def PROJECT_TYPE
 def BACKEND_FILE
 def FRONTEND_FILE
@@ -408,6 +407,7 @@ pipeline {
                     def templateFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.json"
                     def envname = ENV_NAME.toLowerCase()
                     def templateParametersFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.parameters.${envname}.json"
+                    def REGION = "tcs"
                     prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile) // in case external settings needed
                     runPS("Deploy-LogicApps.ps1", "-SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}")
                 }
@@ -465,6 +465,10 @@ def prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile){
             echo "read success"
         def dstParamJson = parseJsonFile(dstParamFileContent)
         for(logicAppParameter in logicAppParamNames){
+            if(dstParamJson['parameters'][logicAppParameter] == null)
+            {
+                dstParamJson['parameters'].add(logicAppParameter)
+            }
             dstParamJson['parameters'][logicAppParameter]['value'] = paramsJson[REGION][LOGICAPP_NAME][ENV_NAME][logicAppParameter]
         }
         def json = groovy.json.JsonOutput.toJson(dstParamJson)
