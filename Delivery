@@ -465,10 +465,10 @@ def prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile){
             echo "read success"
         def dstParamJson = parseJsonFile(dstParamFileContent)
         for(logicAppParameter in logicAppParamNames){
-            if(dstParamJson['parameters'][logicAppParameter] == null)
-            {
-                dstParamJson['parameters'].add(logicAppParameter)
-            }
+            // if(dstParamJson['parameters'][logicAppParameter] == null)
+            // {
+            //     dstParamJson['parameters'].add(logicAppParameter)
+            // }
             dstParamJson['parameters'][logicAppParameter]['value'] = paramsJson[REGION][LOGICAPP_NAME][ENV_NAME][logicAppParameter]
         }
         def json = groovy.json.JsonOutput.toJson(dstParamJson)
