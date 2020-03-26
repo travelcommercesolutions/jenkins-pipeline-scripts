@@ -410,7 +410,6 @@ pipeline {
                     def templateParametersFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.parameters.${envname}.json"
                     prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile) // in case external settings needed
                     runPS("Deploy-LogicApps.ps1", "-SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}")
-                    // powershell "${env.WORKSPACE}\\resources\\azure\\delivery\\Deploy-LogicApps.ps1 -SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}"
                 }
             }
         }
@@ -472,6 +471,11 @@ def prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile){
         json = groovy.json.JsonOutput.prettyPrint(json)
         writeFile(file:templateParametersFile, text: json)
     }
+}
+
+@NonCPS
+def parseJsonFile(fileContent){
+    return new groovy.json.JsonSlurperClassic().parseText(fileContent)
 }
 
 def runPS(psName, args){
