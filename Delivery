@@ -409,7 +409,7 @@ pipeline {
                     def templateParametersFile = "${LOGICAPP_FILE}\\LogicApp-${LOGICAPP_NAME}.parameters.${envname}.json"
                     def REGION = "tcs"
                     prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile) // in case external settings needed
-                    runPS("Deploy-LogicApps.ps1", "-SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}")
+                    powershell "${env.WORKSPACE}\\resources\\azure\\delivery\\Deploy-LogicApps.ps1 -SubscriptionID ${SETTINGS['subscriptionID']} -ResourceGroupName ${SETTINGS['resourceGroupName']} -TemplateFile ${templateFile} -TemplateParametersFile ${templateParametersFile}"
                 }
             }
         }
@@ -465,10 +465,6 @@ def prepareParamFile(REGION, LOGICAPP_NAME, ENV_NAME, templateParametersFile){
             echo "read success"
         def dstParamJson = parseJsonFile(dstParamFileContent)
         for(logicAppParameter in logicAppParamNames){
-            // if(dstParamJson['parameters'][logicAppParameter] == null)
-            // {
-            //     dstParamJson['parameters'].add(logicAppParameter)
-            // }
             dstParamJson['parameters'][logicAppParameter]['value'] = paramsJson[REGION][LOGICAPP_NAME][ENV_NAME][logicAppParameter]
         }
         def json = groovy.json.JsonOutput.toJson(dstParamJson)
