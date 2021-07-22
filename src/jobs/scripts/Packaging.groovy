@@ -360,8 +360,6 @@ class Packaging {
 
 	def static publishGithubRelease(context, releaseTag, releaseNotes, additionalParameters, artifact)   
 	{
-        context.echo "KFC-echo-${context.env.GITHUB_TOKEN}"
-        println("KFC-println-${context.env.GITHUB_TOKEN}")
         def REPO_NAME = Utilities.getRepoName(context)
 		def REPO_ORG = Utilities.getOrgName(context)
 
