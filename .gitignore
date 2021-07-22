@@ -5,6 +5,8 @@
 *.suo
 *.user
 *.sln.docstates
+.idea
+tcs-infrastructure-pipeline-scripts.iml
 
 # Build results
 
