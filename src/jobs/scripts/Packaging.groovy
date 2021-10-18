@@ -415,6 +415,7 @@ class Packaging {
 					bat "\"${tool 'Git'}\" commit -am \"Added new module ${id}\""
 				}
 				*/
+                context.bat "\"${context.tool 'Git'}\" remote add origin https://github.com/travelcommercesolutions/tcs-modules.git"
 			    context.bat "\"${context.tool 'Git'}\" commit -am \"${module} ${version}\""
 			    context.bat "\"${context.tool 'Git'}\" push origin HEAD:master -f"
                 } catch (Exception e) {
