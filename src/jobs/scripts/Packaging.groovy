@@ -341,7 +341,6 @@ class Packaging {
 		} else {
             def releasetime = new Date()
             releaseTag = releasetime.format("dd-MM-yyyy-HH.mm")
-            additionalParameters = "--pre-release"
         }
 
 		context.dir(packagesDir)
@@ -367,8 +366,8 @@ class Packaging {
         releaseNotes = releaseNotes.denormalize().replace(platformLineSeparator, '<br>')
         releaseNotes = releaseNotes.replace("\"", "^\"")
 
-		context.bat "${context.env.Utils}\\github-release release ${additionalParameters} --user $REPO_ORG --security-token ${context.env.GITHUT_TOKEN_TMP} --repo $REPO_NAME --tag ${releaseTag} --description \"${releaseNotes}\""
-		context.bat "${context.env.Utils}\\github-release upload --user $REPO_ORG --security-token ${context.env.GITHUT_TOKEN_TMP} --repo $REPO_NAME --tag ${releaseTag} --name \"${artifact}\" --file \"${artifact}\""
+		context.bat "${context.env.Utils}\\gh release ${additionalParameters} --user $REPO_ORG --security-token ${context.env.GITHUB_TOKEN} --repo $REPO_NAME --tag ${releaseTag} --description \"${releaseNotes}\""
+		context.bat "${context.env.Utils}\\gh upload --user $REPO_ORG --security-token ${context.env.GITHUB_TOKEN} --repo $REPO_NAME --tag ${releaseTag} --name \"${artifact}\" --file \"${artifact}\""
 		context.echo "uploaded to https://github.com/$REPO_ORG/$REPO_NAME/releases/download/${releaseTag}/${artifact}"
 		return "https://github.com/$REPO_ORG/$REPO_NAME/releases/download/${releaseTag}/${artifact}"
 	}
