@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "aseRgName": {
+      "type": "String"
+    },
+    "location": {
+      "type": "String"
+    },
+    "serverfarmName": {
+      "type": "String"
+    },
+    "aseName": {
+      "type": "String"
+    },
+    "tags": {
+      "type": "String"
+    },
+    "tierLevel": {
+      "type": "int",
+      "defaultValue": 2
+    }
+  },
+  "variables": {
+    "tierSize": "[concat('I', parameters('tierLevel'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "sku": {
+        "name": "[variables('tierSize')]",
+        "tier": "Isolated",
+        "size": "[variables('tierSize')]",
+        "family": "I",
+        "capacity": "1"
+      },
+      "kind": "app",
+      "name": "[parameters('serverfarmName')]",
+      "apiVersion": "2016-09-01",
+      "location": "[parameters('location')]",
+      "tags": {
+        "cost": "[parameters('tags')]"
+      },
+      "scale": null,
+      "properties": {
+        "name": "[parameters('serverfarmName')]",
+        "workerTierName": null,
+        "adminSiteName": null,
+        "hostingEnvironmentProfile": {
+          "id": "[resourceId(parameters('aseRgName'),'Microsoft.Web/hostingEnvironments', parameters('aseName'))]"
+        },
+        "perSiteScaling": false,
+        "reserved": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0
+      },
+      "dependsOn": []
+    }
+  ]
+}

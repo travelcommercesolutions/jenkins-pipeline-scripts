@@ -1,0 +1,81 @@
+def database_size = params.database_size
+def tierLevel = params.tierLevel
+def resource_group_name = params.resource_group_name
+def ase_resource_group_name = params.ase_resource_group_name
+def ase_name = params.ase_name
+def location = params.location
+def sql_server_name = params.sql_server_name
+def database_resourceGroup = params.database_resourceGroup
+def dbCredentials = ''
+def tags = ''
+
+// add ENV variables to jenkins
+
+def azureCredentialsId = params.azureCredentialsId
+
+timestamps {
+
+	stage('Cleanup before run') {
+		cleanWs()
+	}
+
+	stage('Create Infra') {
+
+		tags = 'Environment:Stage'
+		println "Using ${tags} tag"
+
+        // id should be added to jenkins
+		dbCredentials = 'tcs-admin-dn-credentials'
+
+
+		withCredentials([azureServicePrincipal(azureCredentialsId)]) {
+			withCredentials([string(credentialsId: 'db_secret_pass_suffix', variable: 'DB_SCHEMA_PASS_SUFFIX')]) {
+				withCredentials([usernamePassword(credentialsId: dbCredentials, passwordVariable: 'DB_ADMIN_PASS', usernameVariable: 'DB_ADMIN_USER')]) {
+					powershell(returnStdout: true, script: '''
+
+						Write-Host "Parameters";
+						$tenantID = "$ENV:AZURE_TENANT_ID"
+						$tenantIDSecStr = ConvertTo-SecureString $tenantID -AsPlainText -Force
+						$resourceGroupName = "$env:resource_group_name"
+						$aseRgName = "$env:ase_resource_group_name"
+						$database_resourceGroup = "$env:database_resourceGroup"
+						$aseName = "$env:ase_name"
+						$location = "$env:location"
+						$tags =  "'''+tags+'''"
+						$sqlServerName = "$env:sql_server_name"
+						$sqlServerAdminUser="$ENV:DB_ADMIN_USER"
+
+						$sqlServerAdminPass="$ENV:DB_ADMIN_PASS"
+						$dbUserPassSuffix="$ENV:DB_SCHEMA_PASS_SUFFIX"
+						$tierLevel = "$env:tierLevel"
+
+						Write-Host "Setting parameters";
+						$aspName = "stag-admin-eu01"
+						$appsrvName = "stag-admin-eu01"
+						$insightsName = "stag-admin-eu01"
+						$insightsLocation = "$location"
+						$databaseName = "stag-eu01"
+						$database_size = "$env:database_size"
+
+						$storageAccName = "stageu01"
+
+						$error.Count
+
+						. ./jenkinsLoginAz.ps1
+						. ./SQL/createSQLDb.ps1
+                        . ./createStorageAccount.ps1
+						. ./createAppServicePlan.ps1
+
+
+						$error.Count
+					''')
+				}
+			}
+		}
+	}
+	stage('Cleanup after run') {
+		retry(20) {
+			cleanWs()
+		}
+	}
+}

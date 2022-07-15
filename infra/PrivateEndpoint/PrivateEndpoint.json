@@ -1,0 +1,139 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "accountType": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "accessTier": {
+      "type": "string"
+    },
+    "minimumTlsVersion": {
+      "type": "string"
+    },
+    "supportsHttpsTrafficOnly": {
+      "type": "bool"
+    },
+    "allowBlobPublicAccess": {
+      "type": "bool"
+    },
+    "allowSharedKeyAccess": {
+      "type": "bool"
+    },
+    "allowCrossTenantReplication": {
+      "type": "bool"
+    },
+    "defaultOAuth": {
+      "type": "bool"
+    },
+    "networkAclsBypass": {
+      "type": "string"
+    },
+    "networkAclsDefaultAction": {
+      "type": "string"
+    },
+    "keySource": {
+      "type": "string"
+    },
+    "encryptionEnabled": {
+      "type": "bool"
+    },
+    "keyTypeForTableAndQueueEncryption": {
+      "type": "string"
+    },
+    "infrastructureEncryptionEnabled": {
+      "type": "bool"
+    },
+    "isContainerRestoreEnabled": {
+      "type": "bool"
+    },
+    "isBlobSoftDeleteEnabled": {
+      "type": "bool"
+    },
+    "blobSoftDeleteRetentionDays": {
+      "type": "int"
+    },
+    "isContainerSoftDeleteEnabled": {
+      "type": "bool"
+    },
+    "containerSoftDeleteRetentionDays": {
+      "type": "int"
+    },
+    "changeFeed": {
+      "type": "bool"
+    },
+    "isVersioningEnabled": {
+      "type": "bool"
+    },
+    "isShareSoftDeleteEnabled": {
+      "type": "bool"
+    },
+    "shareSoftDeleteRetentionDays": {
+      "type": "int"
+    },
+    "privateEndpointName": {
+      "type": "string"
+    },
+    "privateEndpointConnectionName": {
+      "type": "string"
+    }
+  },
+  "functions": [],
+  "variables": {},
+  "resources": [
+    {
+      "name": "[parameters('storageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-08-01",
+      "location": "[parameters('location')]",
+      "properties": {
+        "accessTier": "[parameters('accessTier')]",
+        "encryption": {
+          "keySource": "[parameters('keySource')]",
+          "requireInfrastructureEncryption": "[parameters('infrastructureEncryptionEnabled')]"
+        }
+      },
+      "dependsOn": [],
+      "sku": {
+        "name": "[parameters('accountType')]"
+      },
+      "kind": "[parameters('kind')]",
+      "tags": {}
+    },
+    {
+      "apiVersion": "2021-05-01",
+      "name": "[parameters('privateEndpointName')]",
+      "type": "Microsoft.Network/privateEndpoints",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
+      ],
+      "properties": {
+        "privateLinkServiceConnections": [
+          {
+            "id": "[concat(resourceGroup().id, '/providers/Microsoft.Network/privateEndpoints/privateLinkServiceConnections/', parameters('privateEndpointConnectionName'))]",
+            "name": "[parameters('privateEndpointConnectionName')]",
+            "properties": {
+              "privateLinkServiceId": "/subscriptions/<subID>/resourcegroups/test-aue-storg-dev/providers/Microsoft.Storage/storageAccounts/testauesto01dev",
+              "groupIds": ["blob"]
+            }
+          }
+        ],
+        "manualPrivateLinkServiceConnections": [],
+        "subnet": {
+          "id": "/subscriptions/<subID>/resourceGroups/vnet-aue-rg/providers/Microsoft.Network/virtualNetworks/test-vnet-dev/subnets/test-subnet"
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}

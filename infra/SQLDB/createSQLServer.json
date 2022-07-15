@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "serversName": {
+      "type": "String"
+    },
+    "databasesLogin": {
+      "type": "String"
+    },
+    "databasesPassword": {
+      "type": "secureString"
+    }
+  },
+  "variables": {
+    "region": "[resourceGroup().location]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers",
+      "kind": "v12.0",
+      "name": "[parameters('serversName')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[variables('region')]",
+      "scale": null,
+      "properties": {
+        "administratorLogin": "[parameters('databasesLogin')]",
+        "administratorLoginPassword": "[parameters('databasesPassword')]",
+        "version": "12.0"
+      }
+    }
+  ]
+}
